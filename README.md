@@ -127,14 +127,13 @@ http://localhost:5173
 
 ## 📸 Screenshots
 
-Home
+### Home
 ![alt text](image.png)
 
-Encode
+### Encode
 ![alt text](image-1.png)
 
-
-Decode
+### Decode
 ![alt text](image-2.png)
 
 ---
