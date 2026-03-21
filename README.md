@@ -2,6 +2,8 @@
 
 A powerful **client-side steganography web app** that allows users to **hide and extract any file inside an image securely** using encryption and compression.
 
+Working Link :-
+
 ---
 
 ## 🚀 Features
@@ -49,31 +51,7 @@ Image → Extract Binary → Decrypt → Decompress → Original File
 * 🔐 crypto-js (AES Encryption)
 * 📦 pako (Compression)
 * 💾 file-saver
-* 🆔 uuid
 
----
-
-## 📁 Project Structure
-
-```
-stego.image/
-│
-├── public/
-│
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── utils/
-│   │   ├── stego.js
-│   │   ├── encryption.js
-│   │   ├── compression.js
-│   │
-│   ├── App.jsx
-│   ├── main.jsx
-│
-├── package.json
-└── vite.config.js
-```
 
 ---
 
@@ -144,13 +122,20 @@ http://localhost:5173
 * ✅ Multi-file support (ZIP)
 * ✅ QR code sharing
 * ✅ Progress bar & UI improvements
-* 🔄 Dark/Light mode
 
 ---
 
 ## 📸 Screenshots
 
-> (Add screenshots here after UI is ready)
+Home
+![alt text](image.png)
+
+Encode
+![alt text](image-1.png)
+
+
+Decode
+![alt text](image-2.png)
 
 ---
 
