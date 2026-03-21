@@ -1,16 +1,174 @@
-# React + Vite
+# 🖼️ Stego.Image
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A powerful **client-side steganography web app** that allows users to **hide and extract any file inside an image securely** using encryption and compression.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+* 🔐 **Password Protection**
+  Secure hidden data using AES encryption
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* 📦 **File Compression**
+  Reduce file size before embedding using gzip
 
-## Expanding the ESLint configuration
+* 🖼️ **Image Steganography (LSB)**
+  Hide data inside image pixels without visible changes
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* 📂 **Supports Any File Type**
+  (PDF, ZIP, TXT, Images, etc.)
+
+* 🔓 **Data Extraction**
+  Retrieve hidden files using the correct password
+
+* 🌐 **100% Frontend (No Backend)**
+  All processing happens in the browser
+
+---
+
+## 🧠 How It Works
+
+### 🔒 Encoding Process
+
+```
+File → Compress → Encrypt → Convert to Binary → Hide in Image (LSB)
+```
+
+### 🔓 Decoding Process
+
+```
+Image → Extract Binary → Decrypt → Decompress → Original File
+```
+
+---
+
+## 🛠️ Tech Stack
+
+* ⚛️ React (Vite)
+* 🎨 Bootstrap
+* 🔐 crypto-js (AES Encryption)
+* 📦 pako (Compression)
+* 💾 file-saver
+* 🆔 uuid
+
+---
+
+## 📁 Project Structure
+
+```
+stego.image/
+│
+├── public/
+│
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── utils/
+│   │   ├── stego.js
+│   │   ├── encryption.js
+│   │   ├── compression.js
+│   │
+│   ├── App.jsx
+│   ├── main.jsx
+│
+├── package.json
+└── vite.config.js
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+```bash
+# Clone repository
+git clone https://github.com/your-username/stego.image.git
+
+# Go to project folder
+cd stego.image
+
+# Install dependencies
+npm install
+
+# Run project
+npm run dev
+```
+
+Open in browser:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 📌 Usage
+
+### 🔹 Encode (Hide Data)
+
+1. Upload an image
+2. Upload secret file
+3. Enter password
+4. Click **Encode**
+5. Download stego image
+
+---
+
+### 🔹 Decode (Extract Data)
+
+1. Upload stego image
+2. Enter password
+3. Click **Decode**
+4. Download hidden file
+
+---
+
+## 🔐 Security Notes
+
+* Data is encrypted using **AES**
+* Without the correct password → data is unreadable
+* No server → no data leaves your device
+
+---
+
+## ⚠️ Limitations
+
+* Image must be large enough to hold data
+* Large files may fail due to capacity limits
+* Works best with **PNG images**
+
+---
+
+## 🌟 Future Enhancements
+
+* ✅ Drag & Drop Upload
+* ✅ Multi-file support (ZIP)
+* ✅ QR code sharing
+* ✅ Progress bar & UI improvements
+* 🔄 Dark/Light mode
+
+---
+
+## 📸 Screenshots
+
+> (Add screenshots here after UI is ready)
+
+---
+
+## 📄 License
+
+This project is currently private.
+License will be added when made public.
+
+---
+
+## 👨‍💻 Author
+
+**Rishu**
+
+---
+
+## ⭐ Support
+
+If you like this project, consider giving it a ⭐ on GitHub!
+
+---
