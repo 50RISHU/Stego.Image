@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { encodeImage } from "../utils/stego";
+import { downloadZip } from "../utils/downloadZip";
 
 function Encode() {
   const [image, setImage] = useState(null);
@@ -70,6 +71,11 @@ function Encode() {
     <div className="encode-container container py-5">
       <div className="text-center text-white mb-4">
         <h1>Encode Data into Image</h1>
+        <h5>
+          ⚠️ Please read the instructions carefully before hiding data.
+          <br />
+          Otherwise, your data may be lost.
+        </h5>
         <p>Encrypt and embed file inside image</p>
       </div>
 
@@ -149,7 +155,7 @@ function Encode() {
 
         {/* Download Section */}
         {stegoUrl && (
-          <div className="col-12 text-center mt-4">
+          <div className="col-12 text-center text-white mt-4">
             <h5>Stego Image Ready</h5>
 
             <img
@@ -158,15 +164,28 @@ function Encode() {
               style={{ maxWidth: "300px", borderRadius: "10px" }}
             />
 
-            <div className="mt-3">
+            <div className="mt-3 d-flex gap-3 justify-content-center">
+              {/* Normal PNG download */}
               <a
                 href={stegoUrl}
                 download="stego-image.png"
                 className="primary-btn"
               >
-                Download Image
+                Download PNG
               </a>
+
+              {/* ZIP download (for sharing) */}
+              <button
+                className="primary-btn"
+                onClick={() => downloadZip(stegoUrl)}
+              >
+                Download ZIP (Safe Share)
+              </button>
             </div>
+            <p className="text-warning mt-3">
+              ⚠️ Sharing image directly (WhatsApp, Instagram, etc.) may destroy
+              hidden data. Use ZIP for safe sharing.
+            </p>
           </div>
         )}
       </div>
@@ -178,11 +197,28 @@ function Encode() {
       <div className="info-box mt-4">
         <h5>Instructions</h5>
         <ul>
-          <li>Supported image formats: PNG, BMP (recommended)</li>
-          <li>JPG is not recommended due to compression loss</li>
-          <li>Secret file: any format (zip, txt, pdf, etc.)</li>
-          <li>Use strong password for AES encryption</li>
-          <li>Ensure file size is within image capacity</li>
+          <li>Use PNG or BMP images for best results (lossless formats).</li>
+          <li>
+            JPG/JPEG is not recommended as it may destroy hidden data due to
+            compression.
+          </li>
+          <li>You can hide any type of file (ZIP, PDF, TXT, images, etc.).</li>
+          <li>Always use a strong password to secure your hidden data.</li>
+          <li>
+            Make sure the secret file size does not exceed the image capacity.
+          </li>
+          <li>After encoding, download the image as PNG for direct use.</li>
+          <li>
+            For safe sharing (WhatsApp, Email, etc.), use the ZIP download
+            option.
+          </li>
+          <li>
+            Do NOT share the image directly on platforms that compress images.
+          </li>
+          <li>
+            To decode, upload the same stego image and enter the correct
+            password.
+          </li>
         </ul>
       </div>
     </div>
