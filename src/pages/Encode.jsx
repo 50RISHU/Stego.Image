@@ -8,6 +8,7 @@ function Encode() {
   const [password, setPassword] = useState("");
   const [capacity, setCapacity] = useState(null);
   const [stegoUrl, setStegoUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef();
   const imageInputRef = useRef();
@@ -46,6 +47,8 @@ function Encode() {
       return;
     }
 
+    setLoading(true);
+
     if (file.size > capacity) {
       alert("File too large for selected image");
       return;
@@ -63,6 +66,8 @@ function Encode() {
         setStegoUrl(stegoImage);
       } catch (err) {
         alert(err.message);
+      } finally {
+        setLoading(false);
       }
     };
   };
@@ -148,8 +153,15 @@ function Encode() {
 
         {/* Encode Button */}
         <div className="col-12 text-center">
-          <button className="primary-btn" onClick={handleEncode}>
-            Execute Encoding
+          <button
+            className="primary-btn d-flex align-items-center justify-content-center gap-2 mx-auto"
+            onClick={handleEncode}
+            disabled={loading}
+          >
+            {loading && (
+              <span className="spinner-border spinner-border-sm"></span>
+            )}
+            {loading ? "Encoding..." : "Execute Encoding"}
           </button>
         </div>
 

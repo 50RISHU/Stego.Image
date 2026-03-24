@@ -5,6 +5,7 @@ function Decode() {
   const [image, setImage] = useState(null);
   const [password, setPassword] = useState("");
   const [outputFile, setOutputFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const canvasRef = useRef();
   const imageInputRef = useRef();
@@ -33,6 +34,8 @@ function Decode() {
       return;
     }
 
+    setLoading(true);
+
     const img = new Image();
     img.src = URL.createObjectURL(image);
 
@@ -50,6 +53,8 @@ function Decode() {
         });
       } catch (err) {
         alert(err.message);
+      } finally {
+        setLoading(false);
       }
     };
   };
@@ -98,11 +103,17 @@ function Decode() {
 
         {/* Action */}
         <div className="col-12 text-center">
-          <button className="primary-btn" onClick={handleDecode}>
-            Execute Decoding
+          <button
+            className="primary-btn d-flex align-items-center justify-content-center gap-2 mx-auto"
+            onClick={handleDecode}
+            disabled={loading}
+          >
+            {loading && (
+              <span className="spinner-border spinner-border-sm"></span>
+            )}
+            {loading ? "Decoding..." : "Execute Decoding"}
           </button>
         </div>
-
         {/* Output */}
         {outputFile && (
           <div className="col-12 text-center mt-4">
