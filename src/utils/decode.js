@@ -1,7 +1,6 @@
 import { decryptData } from "./encryption";
 import { decompressData } from "./compression";
 
-// Convert bits → bytes
 function bitsToBytes(bits) {
   const bytes = [];
   for (let i = 0; i < bits.length; i += 8) {
@@ -20,7 +19,6 @@ export async function decodeImage(img, canvas, password) {
   canvas.width = img.width;
   canvas.height = img.height;
   
-  // Disable smoothing to ensure exact pixel accuracy
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(img, 0, 0);
 
@@ -29,14 +27,17 @@ export async function decodeImage(img, canvas, password) {
   // Extract bits
   const bits = [];
   for (let i = 0; i < pixels.length; i += 4) {
-    for (let j = 0; j < 3; j++) {
-      bits.push(pixels[i + j] & 1);
+    // 🔥 ONLY read data from fully opaque pixels
+    if (pixels[i + 3] === 255) {
+      for (let j = 0; j < 3; j++) {
+        bits.push(pixels[i + j] & 1);
+      }
     }
   }
 
   const bytes = bitsToBytes(bits);
 
-  // 🔥 Read metadata length
+  // Read metadata length
   const metaLength =
     (bytes[0] << 24) |
     (bytes[1] << 16) |
@@ -47,16 +48,19 @@ export async function decodeImage(img, canvas, password) {
     throw new Error("Invalid stego image");
   }
 
-  // 🔥 Extract metadata
   const metaBytes = bytes.slice(4, 4 + metaLength);
-  const metadata = JSON.parse(new TextDecoder().decode(metaBytes));
+  
+  let metadata;
+  try {
+    metadata = JSON.parse(new TextDecoder().decode(metaBytes));
+  } catch (e) {
+    throw new Error("Invalid stego image or wrong password format");
+  }
 
   if (metadata.signature !== "STEGO_V1") {
     throw new Error("Invalid stego image");
   }
 
-  // 🔥 Extract EXACTLY the encrypted payload using encryptedSize
-  // Prevents grabbing garbage LSBs from the rest of the image
   const encryptedSize = metadata.encryptedSize; 
   const encryptedEnd = encryptedSize ? (4 + metaLength + encryptedSize) : undefined;
   const encrypted = bytes.slice(4 + metaLength, encryptedEnd);

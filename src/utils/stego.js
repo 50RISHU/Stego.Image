@@ -32,7 +32,7 @@ export async function encodeImage(img, file, password, canvas) {
     name: file.name,
     type: file.type,
     size: file.size,
-    encryptedSize: encrypted.length // 🔥 Added to track exact payload size
+    encryptedSize: encrypted.length
   });
 
   const metaBytes = new TextEncoder().encode(metadata);
@@ -42,7 +42,6 @@ export async function encodeImage(img, file, password, canvas) {
   // 🔥 Build byte stream
   const payload = new Uint8Array(totalLength);
   
-  // store meta length (4 bytes)
   payload[0] = (metaLength >> 24) & 255;
   payload[1] = (metaLength >> 16) & 255;
   payload[2] = (metaLength >> 8) & 255;
@@ -52,23 +51,30 @@ export async function encodeImage(img, file, password, canvas) {
   payload.set(encrypted, 4 + metaLength);
 
   const bits = bytesToBits(payload);
-  const capacity = (pixels.length / 4) * 3;
+  
+  // 🔥 Count only fully opaque pixels for capacity
+  let opaquePixels = 0;
+  for (let i = 0; i < pixels.length; i += 4) {
+    if (pixels[i + 3] === 255) opaquePixels++;
+  }
+  
+  const capacity = opaquePixels * 3;
 
   if (bits.length > capacity) {
-    throw new Error("File too large");
+    throw new Error("File too large. This image has too many transparent pixels.");
   }
 
   let bitIndex = 0;
 
   for (let i = 0; i < pixels.length; i += 4) {
-    for (let j = 0; j < 3; j++) {
-      if (bitIndex < bits.length) {
-        pixels[i + j] = (pixels[i + j] & 254) | bits[bitIndex++];
+    // 🔥 ONLY embed data if the pixel is fully opaque
+    if (pixels[i + 3] === 255) {
+      for (let j = 0; j < 3; j++) {
+        if (bitIndex < bits.length) {
+          pixels[i + j] = (pixels[i + j] & 254) | bits[bitIndex++];
+        }
       }
     }
-    // 🔥 CRITICAL FIX: Force Alpha to 255 to prevent browser 
-    // premultiplication data loss in PNGs with transparency
-    pixels[i + 3] = 255; 
   }
 
   ctx.putImageData(imageData, 0, 0);

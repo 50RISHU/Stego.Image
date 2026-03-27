@@ -15,14 +15,29 @@ function Encode() {
   const canvasRef = useRef();
 
   // Capacity calculation
+  // Capacity calculation
   const calculateCapacity = (imgFile) => {
     const objectUrl = URL.createObjectURL(imgFile);
     const img = new Image();
     img.src = objectUrl;
 
     img.onload = () => {
-      const pixels = img.width * img.height;
-      const bytes = Math.floor((pixels * 3) / 8);
+      // Create a temporary canvas to read the actual pixels
+      const tempCanvas = document.createElement("canvas");
+      const tempCtx = tempCanvas.getContext("2d");
+      tempCanvas.width = img.width;
+      tempCanvas.height = img.height;
+      tempCtx.drawImage(img, 0, 0);
+
+      const pixels = tempCtx.getImageData(0, 0, img.width, img.height).data;
+
+      // Count only opaque pixels
+      let opaqueCount = 0;
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i + 3] === 255) opaqueCount++;
+      }
+
+      const bytes = Math.floor((opaqueCount * 3) / 8);
       setCapacity(bytes);
       URL.revokeObjectURL(objectUrl); // Cleanup memory
     };
@@ -182,10 +197,17 @@ function Encode() {
               style={{ maxWidth: "300px", borderRadius: "10px" }}
             />
             <div className="mt-3 d-flex gap-3 justify-content-center">
-              <a href={stegoUrl} download="stego-image.png" className="primary-btn">
+              <a
+                href={stegoUrl}
+                download="stego-image.png"
+                className="primary-btn"
+              >
                 Download PNG
               </a>
-              <button className="primary-btn" onClick={() => downloadZip(stegoUrl)}>
+              <button
+                className="primary-btn"
+                onClick={() => downloadZip(stegoUrl)}
+              >
                 Download ZIP (Safe Share)
               </button>
             </div>
@@ -205,14 +227,27 @@ function Encode() {
         <h5>Instructions</h5>
         <ul>
           <li>Use PNG or BMP images for best results (lossless formats).</li>
-          <li>JPG/JPEG is not recommended as it may destroy hidden data due to compression.</li>
+          <li>
+            JPG/JPEG is not recommended as it may destroy hidden data due to
+            compression.
+          </li>
           <li>You can hide any type of file (ZIP, PDF, TXT, images, etc.).</li>
           <li>Always use a strong password to secure your hidden data.</li>
-          <li>Make sure the secret file size does not exceed the image capacity.</li>
+          <li>
+            Make sure the secret file size does not exceed the image capacity.
+          </li>
           <li>After encoding, download the image as PNG for direct use.</li>
-          <li>For safe sharing (WhatsApp, Email, etc.), use the ZIP download option.</li>
-          <li>Do NOT share the image directly on platforms that compress images.</li>
-          <li>To decode, upload the same stego image and enter the correct password.</li>
+          <li>
+            For safe sharing (WhatsApp, Email, etc.), use the ZIP download
+            option.
+          </li>
+          <li>
+            Do NOT share the image directly on platforms that compress images.
+          </li>
+          <li>
+            To decode, upload the same stego image and enter the correct
+            password.
+          </li>
         </ul>
       </div>
     </div>
