@@ -134,7 +134,7 @@ function Decode() {
         {outputFile && (
           <div className="col-12 text-center mt-4">
             <div className="output-box p-3 border rounded border-success">
-              <h5 className="text-success">✅ File Extracted Successfully</h5>
+              <h5 className="text-success">File Extracted Successfully</h5>
               <p className="text-white">{outputFile.name}</p>
               <a
                 href={outputFile.url}
