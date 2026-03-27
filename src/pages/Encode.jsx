@@ -16,20 +16,21 @@ function Encode() {
 
   // Capacity calculation
   const calculateCapacity = (imgFile) => {
+    const objectUrl = URL.createObjectURL(imgFile);
     const img = new Image();
-    img.src = URL.createObjectURL(imgFile);
+    img.src = objectUrl;
 
     img.onload = () => {
       const pixels = img.width * img.height;
       const bytes = Math.floor((pixels * 3) / 8);
       setCapacity(bytes);
+      URL.revokeObjectURL(objectUrl); // Cleanup memory
     };
   };
 
   const handleDrop = (e, type) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
-
     if (type === "image") {
       setImage(droppedFile);
       calculateCapacity(droppedFile);
@@ -40,7 +41,7 @@ function Encode() {
 
   const handleDragOver = (e) => e.preventDefault();
 
-  // 🔐 Encode (frontend placeholder)
+  // 🔐 Encode
   const handleEncode = async () => {
     if (!image || !file || !password) {
       alert("All inputs are required");
@@ -49,26 +50,32 @@ function Encode() {
 
     setLoading(true);
 
-    if (file.size > capacity) {
-      alert("File too large for selected image");
-      return;
+    // Rough estimate check (actual check happens in stego.js)
+    if (file.size * 2 > capacity) {
+      alert("File might be too large for selected image. Trying anyway...");
     }
 
+    const objectUrl = URL.createObjectURL(image);
     const img = new Image();
-    img.src = URL.createObjectURL(image);
+    img.src = objectUrl;
 
     img.onload = async () => {
       try {
         const canvas = canvasRef.current;
-
         const stegoImage = await encodeImage(img, file, password, canvas);
-
         setStegoUrl(stegoImage);
       } catch (err) {
         alert(err.message);
       } finally {
         setLoading(false);
+        URL.revokeObjectURL(objectUrl); // Cleanup memory
       }
+    };
+
+    img.onerror = () => {
+      alert("Failed to load image. Please try a different file.");
+      setLoading(false);
+      URL.revokeObjectURL(objectUrl);
     };
   };
 
@@ -98,7 +105,7 @@ function Encode() {
             {image && <span className="file-name">{image.name}</span>}
             <input
               type="file"
-              accept="image/*"
+              accept="image/*" // Suggest lossless formats
               hidden
               ref={imageInputRef}
               onChange={(e) => {
@@ -133,7 +140,7 @@ function Encode() {
         {capacity && (
           <div className="col-12">
             <div className="capacity-box">
-              <h6>Image Capacity</h6>
+              <h6>Estimated Image Capacity</h6>
               <strong>{(capacity / 1024).toFixed(2)} KB</strong>
             </div>
           </div>
@@ -169,28 +176,16 @@ function Encode() {
         {stegoUrl && (
           <div className="col-12 text-center text-white mt-4">
             <h5>Stego Image Ready</h5>
-
             <img
               src={stegoUrl}
               alt="stego preview"
               style={{ maxWidth: "300px", borderRadius: "10px" }}
             />
-
             <div className="mt-3 d-flex gap-3 justify-content-center">
-              {/* Normal PNG download */}
-              <a
-                href={stegoUrl}
-                download="stego-image.png"
-                className="primary-btn"
-              >
+              <a href={stegoUrl} download="stego-image.png" className="primary-btn">
                 Download PNG
               </a>
-
-              {/* ZIP download (for sharing) */}
-              <button
-                className="primary-btn"
-                onClick={() => downloadZip(stegoUrl)}
-              >
+              <button className="primary-btn" onClick={() => downloadZip(stegoUrl)}>
                 Download ZIP (Safe Share)
               </button>
             </div>
@@ -210,27 +205,14 @@ function Encode() {
         <h5>Instructions</h5>
         <ul>
           <li>Use PNG or BMP images for best results (lossless formats).</li>
-          <li>
-            JPG/JPEG is not recommended as it may destroy hidden data due to
-            compression.
-          </li>
+          <li>JPG/JPEG is not recommended as it may destroy hidden data due to compression.</li>
           <li>You can hide any type of file (ZIP, PDF, TXT, images, etc.).</li>
           <li>Always use a strong password to secure your hidden data.</li>
-          <li>
-            Make sure the secret file size does not exceed the image capacity.
-          </li>
+          <li>Make sure the secret file size does not exceed the image capacity.</li>
           <li>After encoding, download the image as PNG for direct use.</li>
-          <li>
-            For safe sharing (WhatsApp, Email, etc.), use the ZIP download
-            option.
-          </li>
-          <li>
-            Do NOT share the image directly on platforms that compress images.
-          </li>
-          <li>
-            To decode, upload the same stego image and enter the correct
-            password.
-          </li>
+          <li>For safe sharing (WhatsApp, Email, etc.), use the ZIP download option.</li>
+          <li>Do NOT share the image directly on platforms that compress images.</li>
+          <li>To decode, upload the same stego image and enter the correct password.</li>
         </ul>
       </div>
     </div>

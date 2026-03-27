@@ -14,7 +14,6 @@ function Decode() {
   const handleDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
@@ -23,6 +22,7 @@ function Decode() {
     }
 
     setImage(file);
+    setOutputFile(null); // Clear previous output on new upload
   };
 
   const handleDragOver = (e) => e.preventDefault();
@@ -30,23 +30,28 @@ function Decode() {
   // 🔓 Decode
   const handleDecode = () => {
     if (!image) {
-      alert("Upload stego image");
+      alert("Please upload a stego image");
+      return;
+    }
+    
+    if (!password) {
+      alert("Please enter the decryption password");
       return;
     }
 
     setLoading(true);
+    setOutputFile(null); // Reset output state
 
+    const objectUrl = URL.createObjectURL(image);
     const img = new Image();
-    img.src = URL.createObjectURL(image);
+    img.src = objectUrl;
 
     img.onload = async () => {
       try {
         const canvas = canvasRef.current;
-
         const { blob, fileName } = await decodeImage(img, canvas, password);
-
         const url = URL.createObjectURL(blob);
-
+        
         setOutputFile({
           url,
           name: fileName,
@@ -55,7 +60,14 @@ function Decode() {
         alert(err.message);
       } finally {
         setLoading(false);
+        URL.revokeObjectURL(objectUrl); // Cleanup memory
       }
+    };
+
+    img.onerror = () => {
+      alert("Failed to load image. Ensure it is a valid image file.");
+      setLoading(false);
+      URL.revokeObjectURL(objectUrl);
     };
   };
 
@@ -84,12 +96,15 @@ function Decode() {
               accept="image/*"
               hidden
               ref={imageInputRef}
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+                setOutputFile(null);
+              }}
             />
           </div>
         </div>
 
-        {/* Password (for future encryption use) */}
+        {/* Password */}
         <div className="col-md-8 offset-md-2">
           <label className="label-text">Decryption Password</label>
           <input
@@ -114,13 +129,13 @@ function Decode() {
             {loading ? "Decoding..." : "Execute Decoding"}
           </button>
         </div>
+        
         {/* Output */}
         {outputFile && (
           <div className="col-12 text-center mt-4">
-            <div className="output-box">
-              <h5>Extracted File</h5>
-              <p>{outputFile.name}</p>
-
+            <div className="output-box p-3 border rounded border-success">
+              <h5 className="text-success">✅ File Extracted Successfully</h5>
+              <p className="text-white">{outputFile.name}</p>
               <a
                 href={outputFile.url}
                 download={outputFile.name}
@@ -142,25 +157,12 @@ function Decode() {
         <ul>
           <li>Upload the stego image generated using this encoder.</li>
           <li>Supported formats: PNG or BMP (lossless images only).</li>
-          <li>
-            If you downloaded a ZIP file, extract it first and then upload the
-            image.
-          </li>
+          <li>If you downloaded a ZIP file, extract it first and then upload the image.</li>
           <li>Enter the correct password used during encoding.</li>
-          <li>
-            Using the wrong password will result in failed or corrupted output.
-          </li>
-          <li>
-            If no data is found, the image may not be encoded or data may be
-            destroyed.
-          </li>
-          <li>
-            Avoid images shared via WhatsApp or social media, as compression can
-            remove hidden data.
-          </li>
-          <li>
-            For best results, always use the original PNG file or ZIP version.
-          </li>
+          <li>Using the wrong password will result in failed or corrupted output.</li>
+          <li>If no data is found, the image may not be encoded or data may be destroyed.</li>
+          <li>Avoid images shared via WhatsApp or social media, as compression can remove hidden data.</li>
+          <li>For best results, always use the original PNG file or ZIP version.</li>
         </ul>
       </div>
     </div>

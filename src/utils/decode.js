@@ -1,110 +1,77 @@
 import { decryptData } from "./encryption";
 import { decompressData } from "./compression";
 
-// ===============================
-// 🔹 Binary → String
-// ===============================
-function binaryToString(binary) {
-  let result = "";
-  for (let i = 0; i < binary.length; i += 8) {
-    const byte = binary.slice(i, i + 8);
-    result += String.fromCharCode(parseInt(byte, 2));
-  }
-  return result;
-}
-
-// ===============================
-// 🔹 Binary → Uint8Array
-// ===============================
-function binaryToBytes(binary) {
+// Convert bits → bytes
+function bitsToBytes(bits) {
   const bytes = [];
-  for (let i = 0; i < binary.length; i += 8) {
-    bytes.push(parseInt(binary.slice(i, i + 8), 2));
+  for (let i = 0; i < bits.length; i += 8) {
+    let byte = 0;
+    for (let j = 0; j < 8; j++) {
+      byte = (byte << 1) | (bits[i + j] || 0);
+    }
+    bytes.push(byte);
   }
   return new Uint8Array(bytes);
 }
 
-// ===============================
-// 🔓 MAIN DECODE FUNCTION
-// ===============================
 export async function decodeImage(img, canvas, password) {
   const ctx = canvas.getContext("2d");
 
   canvas.width = img.width;
   canvas.height = img.height;
-
+  
+  // Disable smoothing to ensure exact pixel accuracy
+  ctx.imageSmoothingEnabled = false;
   ctx.drawImage(img, 0, 0);
 
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const pixels = imageData.data;
+  const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-  // ===============================
-  // 🔍 Extract LSB bits
-  // ===============================
-  let binaryData = "";
-
-  for (let i = 0; i < pixels.length; i++) {
-    binaryData += (pixels[i] & 1).toString();
+  // Extract bits
+  const bits = [];
+  for (let i = 0; i < pixels.length; i += 4) {
+    for (let j = 0; j < 3; j++) {
+      bits.push(pixels[i + j] & 1);
+    }
   }
 
-  // ===============================
-  // 🔚 End Marker
-  // ===============================
-  const endMarker = "1111111111111110";
-  const endIndex = binaryData.indexOf(endMarker);
+  const bytes = bitsToBytes(bits);
 
-  if (endIndex === -1) {
-    throw new Error("No hidden data found");
+  // 🔥 Read metadata length
+  const metaLength =
+    (bytes[0] << 24) |
+    (bytes[1] << 16) |
+    (bytes[2] << 8) |
+    bytes[3];
+
+  if (!metaLength || metaLength > bytes.length) {
+    throw new Error("Invalid stego image");
   }
 
-  binaryData = binaryData.slice(0, endIndex);
+  // 🔥 Extract metadata
+  const metaBytes = bytes.slice(4, 4 + metaLength);
+  const metadata = JSON.parse(new TextDecoder().decode(metaBytes));
 
-  // ===============================
-  // 🧾 Extract Metadata
-  // ===============================
-  const delimiter = "####STEGO####";
-
-  const textData = binaryToString(binaryData);
-
-  const parts = textData.split(delimiter);
-
-  if (parts.length < 3) {
-    throw new Error("Invalid or corrupted data");
+  if (metadata.signature !== "STEGO_V1") {
+    throw new Error("Invalid stego image");
   }
 
-  const metadataString = parts[1];
+  // 🔥 Extract EXACTLY the encrypted payload using encryptedSize
+  // Prevents grabbing garbage LSBs from the rest of the image
+  const encryptedSize = metadata.encryptedSize; 
+  const encryptedEnd = encryptedSize ? (4 + metaLength + encryptedSize) : undefined;
+  const encrypted = bytes.slice(4 + metaLength, encryptedEnd);
 
-  let metadata;
-  try {
-    metadata = JSON.parse(metadataString);
-  } catch {
-    throw new Error("Metadata parsing failed");
+  const decrypted = decryptData(encrypted, password);
+  const finalBytes = decompressData(decrypted);
+
+  if (finalBytes.length !== metadata.size) {
+    throw new Error("Wrong password or corrupted file");
   }
-
-  // ===============================
-  // 📦 Extract File Binary
-  // ===============================
-  const metaBinaryLength = (delimiter + metadataString + delimiter).length * 8;
-
-  const fileBinary = binaryData.slice(metaBinaryLength);
-
-  const encryptedString = binaryToString(fileBinary);
-
-  // 🔓 Decrypt using password
-  const decryptedBytes = decryptData(encryptedString, password);
-
-
-  const finalBytes = decompressData(decryptedBytes);
-
-  // ===============================
-  // 📄 Create File Blob
-  // ===============================
-  const blob = new Blob([finalBytes], {
-    type: metadata.type || "application/octet-stream",
-  });
 
   return {
-    blob,
-    fileName: metadata.name || "decoded_file",
+    blob: new Blob([finalBytes], {
+      type: metadata.type || "application/octet-stream",
+    }),
+    fileName: metadata.name,
   };
 }
