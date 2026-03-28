@@ -12,8 +12,14 @@ body {
 
 /* ===== HERO ===== */
 .hero-section {
+  min-height: calc(100vh - 60px); /* full screen height */
+  display: flex;
+  align-items: center; /* vertical center */
+  justify-content: center; /* horizontal center */
+
   text-align: center;
-  padding: 100px 20px;
+  padding: 20px;
+
   background: radial-gradient(circle at top, #161b22, #0d1117);
 }
 
