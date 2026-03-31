@@ -2,101 +2,118 @@ function About() {
   return (
     <div className="about-container container py-5">
 
-      {/* Title */}
+      {/* Hero */}
       <div className="text-center text-white mb-5">
-        <h1>About Stego.Image</h1>
+        <h1 className="mb-3">About Stego.Image</h1>
         <p className="about-subtext">
-          A client-side steganography application for secure data embedding inside images.
+          A privacy-focused steganography tool that allows users to securely hide
+          and extract files inside digital images directly in the browser.
         </p>
       </div>
 
       {/* Overview */}
-      <section className="about-section">
+      <section className="about-section mb-5">
         <h3>Project Overview</h3>
         <p>
-          Stego.Image is a web-based application designed to hide and retrieve data within digital images
-          using steganography techniques. The system allows users to embed any file inside an image while
-          maintaining visual integrity.
+          Stego.Image is a browser-based steganography application that enables
+          secure data embedding within images using modern web technologies.
+          The system allows users to hide files inside an image while preserving
+          its visual appearance.
         </p>
+
         <p>
-          The application operates entirely in the browser environment, ensuring that no data is transmitted
-          to external servers. This provides a high level of privacy and control over sensitive information.
+          Unlike traditional tools that rely on servers, Stego.Image performs
+          all operations locally inside the user's browser. This ensures that
+          sensitive data never leaves the user's device, providing strong
+          privacy and security guarantees.
         </p>
       </section>
 
-      {/* Working */}
-      <section className="about-section">
+      {/* Workflow */}
+      <section className="about-section mb-5">
         <h3>System Workflow</h3>
-        <ol>
-          <li>User uploads a cover image (preferably PNG or BMP format).</li>
-          <li>User selects a secret file to embed.</li>
-          <li>The file is optionally compressed to reduce size.</li>
-          <li>Data is encrypted using a password-based encryption algorithm.</li>
-          <li>Encrypted binary data is embedded into image pixels using LSB method.</li>
-          <li>Encoded image is generated and available for download.</li>
-          <li>Receiver uploads the encoded image and provides the correct password.</li>
-          <li>Hidden data is extracted and reconstructed into original file.</li>
+
+        <ol className="about-list">
+          <li>User uploads a cover image (PNG or BMP recommended).</li>
+          <li>User selects a secret file to hide.</li>
+          <li>The file may be compressed to reduce its size.</li>
+          <li>Data is encrypted using password-based AES encryption.</li>
+          <li>The encrypted binary data is embedded inside image pixels using the LSB technique.</li>
+          <li>A new encoded image (stego image) is generated.</li>
+          <li>The receiver uploads the encoded image.</li>
+          <li>Using the correct password, the hidden file is extracted and reconstructed.</li>
         </ol>
       </section>
 
       {/* Technology */}
-      <section className="about-section">
+      <section className="about-section mb-5">
         <h3>Technologies Used</h3>
+
         <ul>
-          <li>Frontend: React (Vite)</li>
-          <li>Styling: Bootstrap and custom CSS</li>
-          <li>Encryption: AES-based encryption (crypto-js)</li>
-          <li>Compression: Gzip (pako)</li>
-          <li>File Handling: Browser File API</li>
-          <li>Processing: HTML5 Canvas</li>
+          <li><strong>React (Vite)</strong> — fast modern frontend framework</li>
+          <li><strong>Bootstrap</strong> — responsive UI components</li>
+          <li><strong>Crypto-JS</strong> — AES encryption for secure data protection</li>
+          <li><strong>Pako</strong> — gzip compression for optimized data storage</li>
+          <li><strong>HTML5 Canvas</strong> — pixel manipulation for steganography</li>
         </ul>
       </section>
 
       {/* Security */}
-      <section className="about-section">
+      <section className="about-section mb-5">
         <h3>Security Model</h3>
+
         <p>
-          Stego.Image ensures data confidentiality through a combination of encryption and steganography.
+          Stego.Image combines cryptography and steganography to ensure that
+          hidden data remains confidential and difficult to detect.
         </p>
+
         <ul>
-          <li>All data is encrypted before embedding</li>
-          <li>Password-based access control</li>
-          <li>No backend or server communication</li>
-          <li>Data remains entirely within user environment</li>
+          <li>All files are encrypted before embedding</li>
+          <li>Password-based access protection</li>
+          <li>No server-side storage or processing</li>
+          <li>Fully client-side architecture</li>
+          <li>User data never leaves the browser</li>
         </ul>
       </section>
 
       {/* Features */}
-      <section className="about-section">
+      <section className="about-section mb-5">
         <h3>Key Features</h3>
+
         <ul>
           <li>Hide any file type inside images</li>
           <li>Password-protected data extraction</li>
-          <li>Drag and drop file upload</li>
-          <li>Real-time image capacity calculation</li>
+          <li>Drag & drop file uploads</li>
+          <li>Real-time image capacity estimation</li>
           <li>Fully client-side processing</li>
-          <li>Downloadable encoded image</li>
+          <li>Downloadable encoded images</li>
+          <li>Simple and privacy-focused interface</li>
         </ul>
       </section>
 
       {/* Limitations */}
-      <section className="about-section">
+      <section className="about-section mb-5">
         <h3>Limitations</h3>
+
         <ul>
-          <li>Lossy formats (JPEG) may corrupt hidden data</li>
-          <li>File size is limited by image resolution</li>
-          <li>Incorrect password results in unusable output</li>
-          <li>Browser memory limits may affect large files</li>
+          <li>Lossy formats such as JPEG may corrupt embedded data</li>
+          <li>Hidden file size is limited by image resolution</li>
+          <li>Incorrect passwords result in unusable extracted data</li>
+          <li>Very large files may be limited by browser memory</li>
         </ul>
       </section>
 
       {/* Conclusion */}
       <section className="about-section">
         <h3>Conclusion</h3>
+
         <p>
-          Stego.Image provides a secure and efficient method for hiding data in images using modern web
-          technologies. It combines encryption, compression, and steganography into a single, easy-to-use
-          interface while maintaining full user privacy.
+          Stego.Image provides a modern and secure approach to hiding
+          information inside images. By integrating encryption,
+          compression, and steganographic techniques into a simple
+          web interface, the project showcases how privacy-first
+          applications can be built using entirely client-side
+          technologies.
         </p>
       </section>
 

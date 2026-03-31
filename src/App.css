@@ -329,19 +329,23 @@ h2 {
 
 /* Subtitle */
 .about-subtext {
-  color: #8b949e;
-  font-size: 16px;
+  color: #94a3b8;
+  max-width: 700px;
+  margin: auto;
 }
 
 /* Sections */
 .about-section {
-  margin-bottom: 40px;
+  background: rgba(255,255,255,0.02);
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 30px;
 }
 
 /* Headings */
 .about-section h3 {
+  margin-bottom: 15px;
   color: #58a6ff;
-  margin-bottom: 10px;
 }
 
 /* Text */
@@ -357,10 +361,9 @@ h2 {
   color: #c9d1d9;
 }
 
-.about-section li {
-  margin-bottom: 6px;
+.about-list li {
+  margin-bottom: 8px;
 }
-
 
 
 
