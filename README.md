@@ -2,7 +2,7 @@
 
 A powerful **client-side steganography web app** that allows users to **hide and extract any file inside an image securely** using encryption and compression.
 
-Working Link :- https://stego-image.pages.dev/
+Working Link :- [Click to see live Demo](https://stegoimage.pages.dev/)
 
 ---
 
