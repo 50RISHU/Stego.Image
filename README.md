@@ -265,19 +265,6 @@ This project is licensed under the MIT License.
 
 ---
 
-## 📸 Screenshots
-
-### Home
-![alt text](image.png)
-
-### Encode
-![alt text](image-1.png)
-
-### Decode
-![alt text](image-2.png)
-
----
-
 ## License
 This project is licensed under the MIT License.
 
