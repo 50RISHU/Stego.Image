@@ -74,29 +74,6 @@ The encrypted binary data is embedded in the **least significant bits of image p
 
 ---
 
-## Security Model
-
-Stego.Image provides **multiple layers of protection**.
-
-### Encryption
-- AES-256 symmetric encryption
-- Password-derived keys
-- Data unreadable without correct password
-
-### Steganography
-- Hidden within pixel bits
-- Image appearance unchanged
-- Hidden data not visible to normal viewers
-
-### Privacy
-
-- All operations occur **in your browser**
-- No files uploaded to servers
-- No tracking or analytics
-- No account required
-
----
-
 ## Tech Stack
 
 | Category | Technology |
@@ -163,27 +140,6 @@ Any binary file can be hidden, including:
 
 ---
 
-## Limitations
-
-- Image must be large enough to store the data
-- Works best with **PNG images**
-- JPEG compression may reduce reliability
-- Password cannot be recovered if lost
-
----
-
-## Legal Notice
-
-This tool is intended for **legal and ethical use only**, such as:
-
-- personal privacy
-- secure data sharing
-- educational purposes
-
-Users are responsible for complying with local laws.
-
----
-
 ## Contributing
 
 Contributions are welcome!  
@@ -197,5 +153,5 @@ This project is licensed under the **MIT License**.
 
 ---
 
-If you find this project useful, consider **starring the repository**.
+If you find this project useful, consider **⭐ starring the repository ⭐**.
 
