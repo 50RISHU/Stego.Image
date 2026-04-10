@@ -1,136 +1,93 @@
 # Stego.Image
 
-A **client-side steganography web application** that securely hides and extracts files inside images using **AES-256 encryption**, **GZIP compression**, and **LSB steganography**.  
-All processing happens **directly in the browser** — no server, no uploads, complete privacy.
+![License](https://img.shields.io/badge/license-MIT-green) ![React](https://img.shields.io/badge/React-19-blue) ![Vite](https://img.shields.io/badge/Vite-fast-purple) ![Status](https://img.shields.io/badge/status-active-success)
 
-**Live Demo:** https://stegoimage.pages.dev/
+A **client-side steganography web application** that hides and extracts files inside images using **AES-256 encryption**, **GZIP compression**, and **LSB steganography**.
 
----
+All processing happens **directly in the browser** — no servers, no uploads, complete privacy.
 
-## What is Stego.Image?
-
-**Stego.Image** combines **encryption and steganography** to hide sensitive files inside ordinary images.  
-The hidden data is encrypted and requires a password to extract, providing **two layers of security**:
-
-1. **Steganography** – hides the existence of the data  
-2. **Encryption** – protects the data even if extracted
-
-The resulting image looks identical to the original but secretly contains embedded information.
-
-### Example Use Cases
-
-- Secure document sharing
-- Private file backups
-- Hidden data transmission
-- Privacy-focused file storage
+🌐 **Live Demo**  
+https://stegoimage.pages.dev/
 
 ---
 
-## Features
+# About the Project
 
-- **AES-256 Encryption** – password-protected hidden files  
+**Stego.Image** combines **steganography and encryption** to securely hide files inside ordinary images.
+
+The hidden data:
+- cannot be visually detected
+- requires a **password** to extract
+- remains **encrypted even if extracted**
+
+This creates **two layers of security**:
+
+1. **Steganography** → hides the existence of the data  
+2. **Encryption** → protects the data itself
+
+The output image looks identical to the original but secretly contains hidden information.
+
+---
+
+# Features
+
+- **AES-256 Encryption** – password protected hidden files  
 - **GZIP Compression** – reduces file size before embedding  
-- **LSB Steganography** – invisible pixel-level data embedding  
-- **Supports Any File Type** – documents, archives, images, media, etc.  
-- **100% Client-Side** – no backend server required  
-- **Fast Processing** – encoding and decoding in seconds  
+- **LSB Steganography** – invisible pixel-level data hiding  
+- **Any File Type Supported** – PDF, ZIP, images, documents, media  
+- **100% Client-Side** – no backend or server communication  
+- **Fast Processing** – encode/decode in seconds  
 - **Image Capacity Indicator** – shows available space  
-- **ZIP Export** – download multiple extracted files together  
-- **Drag-and-Drop UI** – easy file uploads
+- **ZIP Export** – download extracted files together  
 
 ---
 
-## How It Works
+# How It Works
 
-Stego.Image combines **three technologies** to hide files securely.
+Stego.Image combines **compression, encryption, and steganography**.
 
-### 1️. Compression (GZIP)
+### Step 1 — Compression
 
-The input file is compressed before embedding to reduce size and increase image capacity.
+The input file is compressed using **GZIP** to reduce size.
 
 Library used: **pako**
 
 ---
 
-### 2️. AES-256 Encryption
+### Step 2 — Encryption
 
-The compressed file is encrypted using a **password-derived key**.
+The compressed file is encrypted using **AES-256 encryption**.
 
-- Industry-standard encryption
-- Data cannot be read without the correct password
-- Even extracted data remains protected
+- Password-derived encryption key
+- Data unreadable without password
+- Industry-standard security
 
 Library used: **crypto-js**
 
 ---
 
-### 3️. LSB Steganography
+### Step 3 — LSB Steganography
 
-The encrypted binary data is embedded in the **least significant bits of image pixels**.
+Encrypted binary data is hidden in the **least significant bits of image pixels**.
 
-- Each pixel contains RGB values
-- The last bit of each channel stores hidden data
-- Changes are **invisible to the human eye**
+Each pixel contains RGB values.
 
----
-
-## Tech Stack
-
-| Category | Technology |
-|--------|-------------|
-| Framework | React |
-| Build Tool | Vite |
-| Styling | Bootstrap |
-| Encryption | crypto-js |
-| Compression | pako |
-| File Download | file-saver |
-| ZIP Support | jszip |
-| File Upload | react-dropzone |
-| Routing | react-router-dom |
-| UUID | uuid |
-
----
-
-## Project Structure
+Example:
 
 ```
 
-StegoImage
-│
-├── public
-├── src
-│   ├── components
-│   │   ├── Navbar.jsx
-│   │   └── Footer.jsx
-│   │
-│   ├── pages
-│   │   ├── Home.jsx
-│   │   ├── Encode.jsx
-│   │   ├── Decode.jsx
-│   │   └── About.jsx
-│   │
-│   ├── utils
-│   │   ├── stego.js
-│   │   ├── encryption.js
-│   │   ├── compression.js
-│   │   ├── decode.js
-│   │   └── downloadZip.js
-│   │
-│   ├── App.jsx
-│   └── main.jsx
-│
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE
-└── package.json
+Original Pixel: 11001010
+Modified Pixel: 11001011
 
 ```
 
+The difference is **invisible to the human eye**.
+
 ---
 
-## Supported File Types
+# Supported File Types
 
-Any binary file can be hidden, including:
+Any binary file can be hidden inside an image, including:
 
 - Documents (PDF, DOCX, TXT)
 - Images (PNG, JPG, GIF)
@@ -140,18 +97,32 @@ Any binary file can be hidden, including:
 
 ---
 
-## Contributing
+# Tech Stack
 
-Contributions are welcome!  
-See **CONTRIBUTING.md** for development setup and contribution guidelines.
+| Category | Technology |
+|--------|-------------|
+| Framework | React |
+| Build Tool | Vite |
+| Styling | Bootstrap |
+| Encryption | crypto-js |
+| Compression | pako |
+| File Handling | file-saver |
+| Archive Support | jszip |
+| File Upload | react-dropzone |
+| Routing | react-router-dom |
+| Unique IDs | uuid |
 
 ---
 
-## License
+# Contributing
+
+Contributions are welcome.
+
+Please read **CONTRIBUTING.md** for development setup and contribution guidelines.
+
+---
+
+# License
 
 This project is licensed under the **MIT License**.
-
----
-
-If you find this project useful, consider **⭐ starring the repository ⭐**.
 
