@@ -1,48 +1,33 @@
-/* Reset */
-* {
+/* ===== GLOBAL RESET ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-/* Body */
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #0f172a; /* dark background */
-  color: #ffffff;
-}
-
-/* Root container */
+/* ===== BASE ===== */
+html,
+body,
 #root {
-  min-height: 100vh;
+  height: 100%;
+  background-color: #0d1117 !important;
+  color: #c9d1d9;
+  font-family: 'Courier New', monospace;
 }
 
-/* Headings */
-h1 {
-  font-size: 40px;
-  margin-bottom: 15px;
-}
+/* ===== TYPOGRAPHY ===== */
+h1 { font-size: clamp(28px, 5vw, 40px); margin-bottom: 15px; }
+h2 { font-size: clamp(20px, 3vw, 24px); margin-bottom: 10px; color: #e6edf3; }
 
-h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-/* Paragraph */
 p {
   color: #94a3b8;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* Buttons */
-button {
-  cursor: pointer;
-  border: none;
-  outline: none;
-}
+/* ===== LINKS ===== */
+a { text-decoration: none; color: inherit; }
 
-/* Links */
-a {
-  text-decoration: none;
-  color: inherit;
-}
+/* ===== BUTTONS (base) ===== */
+button { cursor: pointer; border: none; outline: none; }

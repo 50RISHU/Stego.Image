@@ -1,49 +1,54 @@
-import { Link } from "react-router-dom";
-import logo from "../assets/logo.svg"; // 👈 import logo
+import { Link } from 'react-router-dom'
+import logo from '../assets/logo.svg'
 
+/** Navigation links config — add/remove routes here only. */
+const NAV_LINKS = [
+  { to: '/',       label: 'Home'   },
+  { to: '/encode', label: 'Encode' },
+  { to: '/decode', label: 'Decode' },
+  { to: '/about',  label: 'About'  },
+]
+
+/**
+ * Navbar — top navigation bar with logo and responsive hamburger menu.
+ * Bootstrap collapse is used for mobile toggling.
+ */
 function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark custom-navbar px-3">
-      
-      {/* 🔥 Logo + Text */}
+
+      {/* Brand / logo */}
       <Link className="navbar-brand fw-bold d-flex align-items-center gap-2" to="/">
-        <img 
-          src={logo} 
-          alt="logo" 
-          width="35" 
-          height="35"
-          style={{ objectFit: "cover" }}
-        />
+        <img src={logo} alt="Stego.Image logo" width="35" height="35" />
         Stego.Image
       </Link>
 
+      {/* Mobile hamburger toggle */}
       <button
         className="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navMenu"
+        aria-controls="navMenu"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon"></span>
+        <span className="navbar-toggler-icon" />
       </button>
 
+      {/* Collapsible nav links */}
       <div className="collapse navbar-collapse" id="navMenu">
         <ul className="navbar-nav ms-auto">
-          <li className="nav-item">
-            <Link className="nav-link custom-link" to="/">Home</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link custom-link" to="/encode">Encode</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link custom-link" to="/decode">Decode</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link custom-link" to="/about">About</Link>
-          </li>
+          {NAV_LINKS.map(({ to, label }) => (
+            <li className="nav-item" key={to}>
+              <Link className="nav-link custom-link" to={to}>{label}</Link>
+            </li>
+          ))}
         </ul>
       </div>
+
     </nav>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar
