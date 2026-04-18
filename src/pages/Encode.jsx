@@ -4,15 +4,22 @@ import { downloadZip } from '../utils/downloadZip'
 
 /**
  * Encode page — lets the user pick a cover image and a secret file,
- * enter a password, then embed the encrypted file into the image pixels.
+ * optionally enter a password, then embed the (optionally encrypted)
+ * file into the image pixels.
+ *
+ * Encryption toggle:
+ *   ON  → file is GZIP-compressed then AES-256 encrypted before embedding.
+ *   OFF → file is GZIP-compressed only; no encryption is applied.
+ *         The password field is hidden and irrelevant in this mode.
  */
 function Encode() {
-  const [image,    setImage]    = useState(null)
-  const [file,     setFile]     = useState(null)
-  const [password, setPassword] = useState('')
-  const [capacity, setCapacity] = useState(null)   // max bytes the image can hold
-  const [stegoUrl, setStegoUrl] = useState(null)   // object URL of the output PNG
-  const [loading,  setLoading]  = useState(false)
+  const [image,      setImage]      = useState(null)
+  const [file,       setFile]       = useState(null)
+  const [password,   setPassword]   = useState('')
+  const [useEncrypt, setUseEncrypt] = useState(true)   // encryption toggle — ON by default
+  const [capacity,   setCapacity]   = useState(null)   // max bytes the image can hold
+  const [stegoUrl,   setStegoUrl]   = useState(null)   // object URL of the output PNG
+  const [loading,    setLoading]    = useState(false)
 
   const fileInputRef  = useRef()
   const imageInputRef = useRef()
@@ -70,15 +77,33 @@ function Encode() {
 
   const handleDragOver = (e) => e.preventDefault()
 
+  /**
+   * Toggles encryption on/off.
+   * Clears the password field when turning encryption off.
+   */
+  const handleToggleEncrypt = () => {
+    setUseEncrypt((prev) => {
+      if (prev) setPassword('') // clear password when switching OFF
+      return !prev
+    })
+  }
+
   // ── Encode ─────────────────────────────────────────────────────────────────
 
   /**
-   * Loads the cover image onto the hidden canvas, then calls encodeImage
-   * to compress → encrypt → embed the secret file into the pixels.
+   * Validates inputs, then loads the cover image and calls encodeImage.
+   * Passes password only when encryption is enabled; passes null otherwise
+   * so the stego utility knows to skip the encryption step.
    */
   const handleEncode = async () => {
-    if (!image || !file || !password) {
-      alert('All inputs are required')
+    if (!image || !file) {
+      alert('Please provide both a cover image and a secret file.')
+      return
+    }
+
+    // Password is required only when encryption is enabled
+    if (useEncrypt && !password) {
+      alert('Please enter a password, or turn off encryption.')
       return
     }
 
@@ -95,7 +120,13 @@ function Encode() {
 
     img.onload = async () => {
       try {
-        const result = await encodeImage(img, file, password, canvasRef.current)
+        // Pass null as password when encryption is OFF so encodeImage skips it
+        const result = await encodeImage(
+          img,
+          file,
+          useEncrypt ? password : null,
+          canvasRef.current
+        )
         setStegoUrl(result)
       } catch (err) {
         alert(err.message)
@@ -123,7 +154,7 @@ function Encode() {
         <p className="text-warning small mb-1">
           ⚠️ Read the instructions below before hiding data — incorrect usage may cause data loss.
         </p>
-        <p>Encrypt and embed a file inside an image</p>
+        <p>Embed a file inside an image, with optional AES-256 encryption</p>
       </div>
 
       <div className="row g-4">
@@ -183,17 +214,52 @@ function Encode() {
           </div>
         )}
 
-        {/* Password field */}
+        {/* ── Encryption Toggle ── */}
         <div className="col-12">
-          <label className="label-text">Encryption Password</label>
-          <input
-            type="password"
-            className="form-control custom-input"
-            placeholder="Enter a strong password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="encrypt-toggle-row">
+
+            {/* Left: label + status badge */}
+            <div className="encrypt-toggle-label">
+              <span className="label-text mb-0">Encryption</span>
+              <span className={`encrypt-badge ${useEncrypt ? 'badge-on' : 'badge-off'}`}>
+                {useEncrypt ? '🔒 AES-256 ON' : '🔓 OFF'}
+              </span>
+            </div>
+
+            {/* Right: toggle switch button */}
+            <button
+              type="button"
+              className={`encrypt-toggle-btn ${useEncrypt ? 'toggle-on' : 'toggle-off'}`}
+              onClick={handleToggleEncrypt}
+              aria-pressed={useEncrypt}
+              aria-label="Toggle AES-256 encryption"
+            >
+              <span className="toggle-knob" />
+            </button>
+
+          </div>
+
+          {/* Contextual hint below the toggle */}
+          <p className="encrypt-hint">
+            {useEncrypt
+              ? 'Data will be AES-256 encrypted before embedding. A password is required to decode.'
+              : 'Data will be embedded without encryption. Anyone with the image can extract it.'}
+          </p>
         </div>
+
+        {/* Password field — only rendered when encryption is ON */}
+        {useEncrypt && (
+          <div className="col-12">
+            <label className="label-text">Encryption Password</label>
+            <input
+              type="password"
+              className="form-control custom-input"
+              placeholder="Enter a strong password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        )}
 
         {/* Encode button */}
         <div className="col-12 text-center">
@@ -240,14 +306,10 @@ function Encode() {
       <div className="info-box mt-4">
         <h5>Instructions</h5>
         <ul>
-          <li>Use PNG or BMP images for best results (lossless formats).</li>
-          <li>JPEG is not recommended — compression may corrupt the hidden data.</li>
-          <li>You can hide any file type: ZIP, PDF, TXT, images, etc.</li>
-          <li>Always use a strong password to protect your hidden data.</li>
-          <li>Ensure the secret file size does not exceed the image capacity shown above.</li>
-          <li>Download the output as PNG for direct use, or ZIP for safe sharing.</li>
-          <li>Do NOT share the image on platforms that re-compress images.</li>
-          <li>To decode later, upload the stego image and enter the same password.</li>
+          <li>Use <strong>PNG or BMP</strong> only — JPEG compression will destroy hidden data.</li>
+          <li>Encryption <strong>ON</strong>: set a strong password. <strong>OFF</strong>: anyone can extract the data.</li>
+          <li>Secret file size must not exceed the capacity shown above.</li>
+          <li>Use <strong>Download ZIP</strong> for sharing — direct PNG sharing (WhatsApp, etc.) may corrupt data.</li>
         </ul>
       </div>
 
