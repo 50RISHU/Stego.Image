@@ -1,95 +1,76 @@
 # Contributing to Stego.Image
 
-Thank you for your interest in contributing to **Stego.Image**. Contributions that improve functionality, security, documentation, or usability are welcome.
+Contributions that improve functionality, security, performance, or documentation are welcome.
 
 ---
 
-## Development Setup
-
-### 1. Fork the Repository
-
-Create your own copy of the repository using the **Fork** button on GitHub.
-
-### 2. Clone the Repository
+## Getting Started
 
 ```bash
+# 1. Fork the repo, then clone your fork
 git clone https://github.com/<your-username>/StegoImage.git
 cd StegoImage
-````
 
-### 3. Install Dependencies
-
-```bash
+# 2. Install dependencies
 npm install
-```
 
-### 4. Run the Development Server
-
-```bash
+# 3. Start the dev server
 npm run dev
-```
-
-Open `http://localhost:5173` in your browser.
-
-### 5. Create a New Branch
-
-Work on a separate branch for each change.
-
-```bash
-git checkout -b feature/your-feature-name
+# → http://localhost:5173
 ```
 
 ---
 
-## Submitting Changes
-
-1. Make your changes and ensure the project builds successfully.
-2. Commit using clear and descriptive messages.
+## Workflow
 
 ```bash
-git add .
-git commit -m "Add feature: description of change"
-```
+# Create a focused branch
+git checkout -b feature/your-feature-name
 
-3. Push your branch.
+# Commit with a clear message
+git commit -m "feat: short description of change"
 
-```bash
+# Push and open a Pull Request
 git push origin feature/your-feature-name
 ```
 
-4. Open a **Pull Request** and describe the purpose of your changes.
+Open a **Pull Request** against `main`. Describe what changed and why.
 
 ---
 
-## Contribution Guidelines
+## Guidelines
 
-* Keep changes focused and minimal.
-* Follow the existing project structure and coding style.
-* Write clear and maintainable code.
-* Avoid adding unnecessary dependencies.
-* Ensure the application runs without errors before submitting.
-* Update documentation when relevant.
+- Keep changes focused — one feature or fix per PR.
+- Follow the existing project structure and coding style.
+- Do not introduce unnecessary dependencies.
+- Ensure the app builds and runs without errors before submitting.
+- Update relevant documentation when behaviour changes.
 
 ---
 
 ## Reporting Issues
 
-If you discover a bug or security issue, open an issue and include:
+Open a GitHub issue and include:
 
-* A clear description of the problem
-* Steps to reproduce the issue
-* Expected behavior
-* Screenshots or logs if applicable
+- A clear description of the problem
+- Steps to reproduce
+- Expected vs actual behaviour
+- Screenshots or console logs if applicable
 
----
-
-## Code Standards
-
-* Use consistent formatting and naming conventions.
-* Follow standard React and JavaScript best practices.
-* Ensure code readability and maintainability.
+For **security vulnerabilities**, please open a private issue or contact the maintainer directly rather than disclosing publicly.
 
 ---
 
-By contributing to this project, you agree that your contributions will be licensed under the same license as the project.
+## Commit Convention
 
+| Prefix | Use for |
+|--------|---------|
+| `feat:` | New feature |
+| `fix:` | Bug fix |
+| `docs:` | Documentation only |
+| `refactor:` | Code change with no behaviour change |
+| `chore:` | Build, config, or tooling |
+
+---
+
+All contributions are licensed under the project's existing [MIT License](./LICENSE).
