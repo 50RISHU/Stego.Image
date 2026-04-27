@@ -1,128 +1,92 @@
-# Stego.Image
+<p align="center">
+  <img src="public/logo.svg" alt="Stego.Image" width="80" />
+</p>
 
-![License](https://img.shields.io/badge/license-MIT-green) ![React](https://img.shields.io/badge/React-19-blue) ![Vite](https://img.shields.io/badge/Vite-fast-purple) ![Status](https://img.shields.io/badge/status-active-success)
+<h1 align="center">Stego.Image</h1>
 
-A **client-side steganography web application** that hides and extracts files inside images using **AES-256 encryption**, **GZIP compression**, and **LSB steganography**.
+<p align="center">Hide files inside images — securely, privately, in your browser.</p>
 
-All processing happens **directly in the browser** — no servers, no uploads, complete privacy.
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-green" />
+  <img src="https://img.shields.io/badge/React-19-blue" />
+  <img src="https://img.shields.io/badge/Vite-fast-purple" />
+  <img src="https://img.shields.io/badge/status-active-success" />
+</p>
 
-🌐 **Live Demo**  
-https://stegoimage.pages.dev/
-
----
-
-# About the Project
-
-**Stego.Image** combines **steganography and encryption** to securely hide files inside ordinary images.
-
-The hidden data:
-- cannot be visually detected
-- requires a **password** to extract
-- remains **encrypted even if extracted**
-
-This creates **two layers of security**:
-
-1. **Steganography** → hides the existence of the data  
-2. **Encryption** → protects the data itself
-
-The output image looks identical to the original but secretly contains hidden information.
+<p align="center">
+  <a href="https://stegoimage.pages.dev/">🌐 Live Demo</a>
+</p>
 
 ---
 
-# Features
+## What It Does
 
-- **AES-256 Encryption** – password protected hidden files  
-- **GZIP Compression** – reduces file size before embedding  
-- **LSB Steganography** – invisible pixel-level data hiding  
-- **Any File Type Supported** – PDF, ZIP, images, documents, media  
-- **100% Client-Side** – no backend or server communication  
-- **Fast Processing** – encode/decode in seconds  
-- **Image Capacity Indicator** – shows available space  
-- **ZIP Export** – download extracted files together  
+Stego.Image embeds any file inside an ordinary image using **LSB steganography**. The output image looks identical to the original. Encryption is optional — when enabled, data is protected with **AES-256** before embedding.
+
+All processing runs **100% client-side**. No uploads, no servers, no data leaves your device.
 
 ---
 
-# How It Works
+## Features
 
-Stego.Image combines **compression, encryption, and steganography**.
-
-### Step 1 — Compression
-
-The input file is compressed using **GZIP** to reduce size.
-
-Library used: **pako**
-
----
-
-### Step 2 — Encryption
-
-The compressed file is encrypted using **AES-256 encryption**.
-
-- Password-derived encryption key
-- Data unreadable without password
-- Industry-standard security
-
-Library used: **crypto-js**
+- 🔒 **Optional AES-256 encryption** — toggle on/off per encode
+- 🗜️ **GZIP compression** — reduces payload size before embedding
+- 🖼️ **LSB steganography** — pixel-level, visually undetectable
+- 📁 **Any file type** — PDF, ZIP, images, media, code, and more
+- 📊 **Capacity indicator** — shows how much data the image can hold
+- ⚡ **Fast** — encode and decode in seconds
 
 ---
 
-### Step 3 — LSB Steganography
-
-Encrypted binary data is hidden in the **least significant bits of image pixels**.
-
-Each pixel contains RGB values.
-
-Example:
+## How It Works
 
 ```
-
-Original Pixel: 11001010
-Modified Pixel: 11001011
-
+File  →  GZIP compress  →  [AES-256 encrypt]  →  Embed into image pixels  →  PNG output
 ```
 
-The difference is **invisible to the human eye**.
+Each pixel's RGB channels have their least significant bit modified to store data.
+The visual change is imperceptible to the human eye.
 
 ---
 
-# Supported File Types
+## Tech Stack
 
-Any binary file can be hidden inside an image, including:
-
-- Documents (PDF, DOCX, TXT)
-- Images (PNG, JPG, GIF)
-- Archives (ZIP, RAR, 7z)
-- Media files (MP3, MP4)
-- Code files (JS, Python, JSON)
-
----
-
-# Tech Stack
-
-| Category | Technology |
-|--------|-------------|
-| Framework | React |
-| Build Tool | Vite |
-| Styling | Bootstrap |
+| Purpose | Library |
+|---------|---------|
+| Framework | React 19 + Vite |
 | Encryption | crypto-js |
 | Compression | pako |
-| File Handling | file-saver |
-| Archive Support | jszip |
-| File Upload | react-dropzone |
-| Routing | react-router-dom |
-| Unique IDs | uuid |
+| Steganography | HTML5 Canvas |
+| UI | Bootstrap |
+| File export | file-saver + jszip |
 
 ---
 
-# Contributing
+## Getting Started
 
-Contributions are welcome.
-
-Please read **CONTRIBUTING.md** for development setup and contribution guidelines.
+```bash
+git clone https://github.com/<your-username>/StegoImage.git
+cd StegoImage
+npm install
+npm run dev
+```
 
 ---
 
-# License
+## Important Notes
 
-This project is licensed under the **MIT License**.
+- Use **PNG or BMP** only — JPEG compression destroys hidden data.
+- For sharing, use the **ZIP download** — social platforms re-compress images.
+- Encryption toggle and password during **decode must match** what was used to encode.
 
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup and guidelines.
+
+---
+
+## License
+
+MIT — free to use, modify, and distribute. See [LICENSE](LICENSE) for details.
