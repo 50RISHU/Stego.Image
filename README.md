@@ -29,12 +29,12 @@ All processing runs **100% client-side**. No uploads, no servers, no data leaves
 
 ## Features
 
-- 🔒 **Optional AES-256 encryption** — toggle on/off per encode
-- 🗜️ **GZIP compression** — reduces payload size before embedding
-- 🖼️ **LSB steganography** — pixel-level, visually undetectable
-- 📁 **Any file type** — PDF, ZIP, images, media, code, and more
-- 📊 **Capacity indicator** — shows how much data the image can hold
-- ⚡ **Fast** — encode and decode in seconds
+- **Optional AES-256 encryption** — toggle on/off per encode
+- **GZIP compression** — reduces payload size before embedding
+- **LSB steganography** — pixel-level, visually undetectable
+- **Any file type** — PDF, ZIP, images, media, code, and more
+- **Capacity indicator** — shows how much data the image can hold
+- **Fast** — encode and decode in seconds
 
 ---
 
