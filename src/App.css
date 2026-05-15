@@ -241,6 +241,184 @@ body,
 .about-section ol       { padding-left: 20px; color: var(--text-body); }
 .about-list li          { margin-bottom: 8px; }
 
+
+/* ── Section heading ── */
+.about-section-title {
+  color: var(--accent-blue);
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* ── Pipeline step cards ── */
+.about-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.about-step-number {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-step-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.about-step-title {
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.about-step-desc {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+
+/* ── Tables (metadata schema & tech stack) ── */
+.about-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.about-meta-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  color: var(--text-body);
+}
+
+.about-meta-table thead tr {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.about-meta-table th {
+  padding: 10px 14px;
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.about-meta-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.about-meta-table tr:last-child td {
+  border-bottom: none;
+}
+
+.about-meta-table code {
+  background: rgba(88, 166, 255, 0.1);
+  color: var(--accent-blue);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.about-type-badge {
+  background: rgba(35, 134, 54, 0.2);
+  color: #3fb950;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: 'SFMono-Regular', monospace;
+}
+
+/* ── Warning note ── */
+.about-note {
+  background: rgba(210, 153, 34, 0.1);
+  border-left: 3px solid #d29922;
+  color: var(--text-body);
+  padding: 10px 14px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.875rem;
+}
+
+/* ── Limitations ── */
+.about-limitations {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-limitation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.about-limitation-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* ── FAQ ── */
+.about-faq-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.about-faq-q {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.about-faq-a {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+
+
+
+
+
 /* ===== ENCRYPTION TOGGLE ===== */
 
 /* Row: label+badge on the left, switch on the right */
