@@ -49,6 +49,35 @@ This creates **two independent security layers** — steganography hides the *ex
 
 ---
 
+## Security Model
+
+Stego.Image applies **defense in depth** — two independent protections stack on top of each other.
+
+| Layer | Technology | What It Protects Against |
+|---|---|---|
+| Steganography | LSB pixel embedding | Casual detection — the hidden file is invisible |
+| Encryption | AES-256 + password | Content exposure — data is unreadable without the key |
+
+Even if someone suspects an image contains hidden data and successfully extracts the raw bytes, they still cannot read the content without the correct password. Both layers must be defeated independently.
+
+> **Privacy note:** All cryptographic operations run entirely in your browser using the `crypto-js`. No key material, plaintext, or file content is ever transmitted anywhere.
+
+---
+
+## Supported Files
+
+Any binary file can be hidden inside a carrier image. Common examples:
+
+- **Documents** — PDF, DOCX, TXT, XLSX
+- **Archives** — ZIP, RAR, 7z
+- **Media** — MP3, MP4, PNG, JPG, GIF
+- **Code** — JS, Python, JSON, HTML
+- **Other** — anything with a file extension works
+
+**Capacity** depends on the carrier image size: roughly `(width × height × 3) / 8` bytes. A 1920×1080 image can hold ~777 KB of hidden data. Use a larger image for larger payloads.
+
+---
+
 ## Tech Stack
 
 | Purpose | Library |
@@ -75,7 +104,14 @@ This creates **two independent security layers** — steganography hides the *ex
 
 Contributions are welcome — bug fixes, new features, or documentation improvements.
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions, branch naming, and the PR process.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for full setup instructions, branch naming conventions, and the PR checklist.
+
+**Quick steps:**
+1. Fork the repo and create a branch: `git checkout -b feat/your-feature`
+2. Commit using [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`, `chore:`
+3. Open a Pull Request with a clear description of what changed and why
+
+**New to the project?** Issues tagged [`good first issue`](https://github.com/<your-username>/StegoImage/issues?q=label%3A%22good+first+issue%22) are a great starting point.
 
 To report a bug, [open an issue](https://github.com/<your-username>/StegoImage/issues/new) with steps to reproduce, your browser/OS, and any relevant console errors.
 
