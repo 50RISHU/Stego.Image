@@ -1,60 +1,103 @@
 # Contributing to Stego.Image
 
-Contributions that improve functionality, security, performance, or documentation are welcome. Please read this guide before submitting.
+Welcome! We're glad you want to contribute. This guide is written for beginners — no experience needed.
 
 ---
 
-## Setup
+## Before You Start
+
+- You'll need [Git](https://git-scm.com) and [Node.js 18+](https://nodejs.org) installed
+- Read this whole guide before opening your first PR
+
+---
+
+## Step 1 — Fork & Clone
+
+1. Click **Fork** on the top right of this repo
+2. Clone your fork to your computer:
 
 ```bash
-git clone https://github.com/<your-username>/StegoImage.git
-cd StegoImage
+git clone https://github.com/YOUR_USERNAME/stego.image.git
+cd stego.image
 npm install
-npm run dev        # → http://localhost:5173
+npm run dev
 ```
 
 ---
 
-## Submitting a Change
+## Step 2 — Create a Branch
+
+Never work directly on `main`. Always create a new branch:
 
 ```bash
-git checkout -b feat/your-feature-name
-git commit -m "feat: describe your change"
-git push origin feat/your-feature-name
+git checkout -b fix/my-bug-fix
 ```
 
-Open a **Pull Request** against `main`. Clearly describe what changed and why.
+Use one of these prefixes:
+
+| Prefix | Use it for |
+|--------|------------|
+| `feat/` | Adding something new |
+| `fix/` | Fixing a bug |
+| `docs/` | Updating documentation |
+| `chore/` | Small cleanup or config |
 
 ---
 
-## Commit Prefixes
+## Step 3 — Make Your Changes
 
-| Prefix | Purpose |
-|--------|---------|
-| `feat:` | New feature |
-| `fix:` | Bug fix |
-| `docs:` | Documentation only |
-| `refactor:` | No behaviour change |
-| `chore:` | Build or config |
+- Keep changes **small and focused** — one fix or one feature per PR
+- Test your changes in the browser before submitting
+- Make sure `npm run build` runs without errors
 
 ---
 
-## Guidelines
+## Step 4 — Commit Your Changes
 
-- One feature or fix per PR — keep changes focused.
-- Follow the existing code structure and style.
-- Avoid adding unnecessary dependencies.
-- Ensure the app builds without errors before submitting.
-- Update documentation if behaviour changes.
+Write a clear commit message that explains what you did:
+
+```bash
+git add .
+git commit -m "fix: correct typo on encode page"
+git push origin fix/my-bug-fix
+```
+
+**Good commit messages:**
+```
+feat: add file size warning before encoding
+fix: prevent crash when image is too small
+docs: fix broken link in README
+```
+
+**Bad commit messages:**
+```
+update stuff
+fix
+asdfgh
+```
 
 ---
 
-## Reporting Issues
+## Step 5 — Open a Pull Request
 
-Open a GitHub issue and include a description, steps to reproduce, and expected vs actual behaviour.
-
-For **security vulnerabilities**, contact the maintainer privately instead of opening a public issue.
+1. Go to your fork on GitHub
+2. Click **Compare & pull request**
+3. Fill in what you changed and why
+4. Submit — a maintainer will review it
 
 ---
 
-All contributions are licensed under the project's [MIT License](./LICENSE).
+## Ground Rules
+
+- **Be kind.** Everyone here is learning.
+- **Ask before big changes.** Open an issue first if you want to redesign something major.
+- **Don't add trackers or external APIs.** This app is 100% private and client-side — keep it that way.
+- **One thing per PR.** Don't mix a bug fix with a new feature in the same PR.
+
+---
+
+## Not Sure Where to Start?
+
+Look for issues tagged **`good first issue`** — these are picked specifically for new contributors.
+
+If you're stuck, leave a comment on the issue and someone will help you.
