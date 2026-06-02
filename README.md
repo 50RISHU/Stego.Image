@@ -9,6 +9,8 @@
   100% client-side. No servers. No uploads. Your data never leaves your device.
 </p>
 
+## Badges
+
 <p align="center">
   <a href="https://stegoimage.pages.dev/"><img src="https://img.shields.io/badge/🌐 Live Demo-stegoimage.pages.dev-blue?style=flat-square" /></a>
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" />
@@ -16,6 +18,12 @@
   <img src="https://img.shields.io/badge/Vite-6-646CFF?style=flat-square&logo=vite" />
   <img src="https://img.shields.io/badge/status-active-brightgreen?style=flat-square" />
 </p>
+
+---
+
+## Introduction
+
+Stego.Image is a secure, client-side steganography tool that lets you hide any file inside an image with AES-256 encryption and GZIP compression. Perfect for privacy-conscious users who need a simple way to conceal sensitive files. All operations run entirely in your browser — no data ever touches a server.
 
 ---
 
@@ -49,38 +57,23 @@ This creates **two independent security layers** — steganography hides the *ex
 
 ---
 
-## Tech Stack
+## Security
 
-| Purpose | Library |
-|---|---|
-| Framework | React 19 + Vite |
-| Encryption | crypto-js (AES-256) |
-| Compression | pako (GZIP) |
-| Steganography | HTML5 Canvas API |
-| UI | Bootstrap |
-| File Export | file-saver + jszip |
+Stego.Image applies **defense in depth** — two independent protections stack on top of each other.
 
----
+| Layer | Technology | What It Protects Against |
+|---|---|---|
+| Steganography | LSB pixel embedding | Casual detection — the hidden file is invisible |
+| Encryption | AES-256 + password | Content exposure — data is unreadable without the key |
 
-## Important Notes
+Even if someone suspects an image contains hidden data and successfully extracts the raw bytes, they still cannot read the content without the correct password. Both layers must be defeated independently.
 
-- **PNG or BMP only** — JPEG's lossy compression alters pixel values and destroys hidden data on save.
-- **Avoid social platforms** — Twitter, WhatsApp, and similar services re-compress images on upload, corrupting the payload. Share the output file directly.
-- **Encryption settings must match** — the password and encryption toggle used at decode must be identical to what was set at encode.
-- **No password recovery** — AES-256 without the correct key is computationally infeasible to break. There is no fallback.
-
----
-
-## Contributing
-
-Contributions are welcome — bug fixes, new features, or documentation improvements.
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions, branch naming, and the PR process.
-
-To report a bug, [open an issue](https://github.com/<your-username>/StegoImage/issues/new) with steps to reproduce, your browser/OS, and any relevant console errors.
+> **Privacy note:** All cryptographic operations run entirely in your browser using the `crypto-js`. No key material, plaintext, or file content is ever transmitted anywhere.
 
 ---
 
 ## License
 
-MIT — free to use, modify, and distribute. See [LICENSE](./LICENSE) for details.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+You are free to use, modify, and distribute this software for personal and commercial purposes, provided you include the original license notice.
