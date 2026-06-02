@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { to: '/encode', label: 'Encode' },
   { to: '/decode', label: 'Decode' },
   { to: '/about',  label: 'About'  },
+  { to: 'https://github.com/50RISHU/Stego.Image',  label: 'Github'  },
 ]
 
 /**
