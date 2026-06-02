@@ -9,6 +9,8 @@
   100% client-side. No servers. No uploads. Your data never leaves your device.
 </p>
 
+## Badges
+
 <p align="center">
   <a href="https://stegoimage.pages.dev/"><img src="https://img.shields.io/badge/🌐 Live Demo-stegoimage.pages.dev-blue?style=flat-square" /></a>
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" />
@@ -16,6 +18,12 @@
   <img src="https://img.shields.io/badge/Vite-6-646CFF?style=flat-square&logo=vite" />
   <img src="https://img.shields.io/badge/status-active-brightgreen?style=flat-square" />
 </p>
+
+---
+
+## Introduction
+
+Stego.Image is a secure, client-side steganography tool that lets you hide any file inside an image with AES-256 encryption and GZIP compression. Perfect for privacy-conscious users who need a simple way to conceal sensitive files. All operations run entirely in your browser — no data ever touches a server.
 
 ---
 
@@ -49,7 +57,7 @@ This creates **two independent security layers** — steganography hides the *ex
 
 ---
 
-## Security Model
+## Security
 
 Stego.Image applies **defense in depth** — two independent protections stack on top of each other.
 
@@ -64,59 +72,8 @@ Even if someone suspects an image contains hidden data and successfully extracts
 
 ---
 
-## Supported Files
-
-Any binary file can be hidden inside a carrier image. Common examples:
-
-- **Documents** — PDF, DOCX, TXT, XLSX
-- **Archives** — ZIP, RAR, 7z
-- **Media** — MP3, MP4, PNG, JPG, GIF
-- **Code** — JS, Python, JSON, HTML
-- **Other** — anything with a file extension works
-
-**Capacity** depends on the carrier image size: roughly `(width × height × 3) / 8` bytes. A 1920×1080 image can hold ~777 KB of hidden data. Use a larger image for larger payloads.
-
----
-
-## Tech Stack
-
-| Purpose | Library |
-|---|---|
-| Framework | React 19 + Vite |
-| Encryption | crypto-js (AES-256) |
-| Compression | pako (GZIP) |
-| Steganography | HTML5 Canvas API |
-| UI | Bootstrap |
-| File Export | file-saver + jszip |
-
----
-
-## Important Notes
-
-- **PNG or BMP only** — JPEG's lossy compression alters pixel values and destroys hidden data on save.
-- **Avoid social platforms** — Twitter, WhatsApp, and similar services re-compress images on upload, corrupting the payload. Share the output file directly.
-- **Encryption settings must match** — the password and encryption toggle used at decode must be identical to what was set at encode.
-- **No password recovery** — AES-256 without the correct key is computationally infeasible to break. There is no fallback.
-
----
-
-## Contributing
-
-Contributions are welcome — bug fixes, new features, or documentation improvements.
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for full setup instructions, branch naming conventions, and the PR checklist.
-
-**Quick steps:**
-1. Fork the repo and create a branch: `git checkout -b feat/your-feature`
-2. Commit using [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`, `chore:`
-3. Open a Pull Request with a clear description of what changed and why
-
-**New to the project?** Issues tagged [`good first issue`](https://github.com/<your-username>/StegoImage/issues?q=label%3A%22good+first+issue%22) are a great starting point.
-
-To report a bug, [open an issue](https://github.com/<your-username>/StegoImage/issues/new) with steps to reproduce, your browser/OS, and any relevant console errors.
-
----
-
 ## License
 
-MIT — free to use, modify, and distribute. See [LICENSE](./LICENSE) for details.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+You are free to use, modify, and distribute this software for personal and commercial purposes, provided you include the original license notice.
