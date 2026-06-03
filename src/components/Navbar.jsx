@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import logo from '../assets/logo.svg'
+import logo from '../assets/logo.png'
 
 /** Navigation links config — add/remove routes here only. */
 const NAV_LINKS = [
@@ -20,7 +20,7 @@ function Navbar() {
 
       {/* Brand / logo */}
       <Link className="navbar-brand fw-bold d-flex align-items-center gap-2" to="/">
-        <img src={logo} alt="Stego.Image logo" width="35" height="35" />
+        <img src={logo} alt="Stego.Image logo" width="30" height="30" />
         Stego.Image
       </Link>
 
