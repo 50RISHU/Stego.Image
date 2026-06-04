@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
-import { encodeImage } from '../utils/stego'
-import { downloadZip } from '../utils/downloadZip'
+import { useState, useRef } from "react";
+import { Helmet } from "react-helmet-async";
+import { encodeImage } from "../utils/stego";
+import { downloadZip } from "../utils/downloadZip";
 
 /**
  * Encode page — lets the user pick a cover image and a secret file,
@@ -13,17 +14,17 @@ import { downloadZip } from '../utils/downloadZip'
  *         The password field is hidden and irrelevant in this mode.
  */
 function Encode() {
-  const [image,      setImage]      = useState(null)
-  const [file,       setFile]       = useState(null)
-  const [password,   setPassword]   = useState('')
-  const [useEncrypt, setUseEncrypt] = useState(true)   // encryption toggle — ON by default
-  const [capacity,   setCapacity]   = useState(null)   // max bytes the image can hold
-  const [stegoUrl,   setStegoUrl]   = useState(null)   // object URL of the output PNG
-  const [loading,    setLoading]    = useState(false)
+  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const [password, setPassword] = useState("");
+  const [useEncrypt, setUseEncrypt] = useState(true); // encryption toggle — ON by default
+  const [capacity, setCapacity] = useState(null); // max bytes the image can hold
+  const [stegoUrl, setStegoUrl] = useState(null); // object URL of the output PNG
+  const [loading, setLoading] = useState(false);
 
-  const fileInputRef  = useRef()
-  const imageInputRef = useRef()
-  const canvasRef     = useRef()
+  const fileInputRef = useRef();
+  const imageInputRef = useRef();
+  const canvasRef = useRef();
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -33,29 +34,29 @@ function Encode() {
    * @param {File} imgFile
    */
   const calculateCapacity = (imgFile) => {
-    const objectUrl = URL.createObjectURL(imgFile)
-    const img = new window.Image()
-    img.src = objectUrl
+    const objectUrl = URL.createObjectURL(imgFile);
+    const img = new window.Image();
+    img.src = objectUrl;
 
     img.onload = () => {
-      const tempCanvas = document.createElement('canvas')
-      const ctx = tempCanvas.getContext('2d')
-      tempCanvas.width  = img.width
-      tempCanvas.height = img.height
-      ctx.drawImage(img, 0, 0)
+      const tempCanvas = document.createElement("canvas");
+      const ctx = tempCanvas.getContext("2d");
+      tempCanvas.width = img.width;
+      tempCanvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
 
-      const pixels = ctx.getImageData(0, 0, img.width, img.height).data
+      const pixels = ctx.getImageData(0, 0, img.width, img.height).data;
 
       // Count only fully opaque pixels (alpha === 255)
-      let opaqueCount = 0
+      let opaqueCount = 0;
       for (let i = 0; i < pixels.length; i += 4) {
-        if (pixels[i + 3] === 255) opaqueCount++
+        if (pixels[i + 3] === 255) opaqueCount++;
       }
 
-      setCapacity(Math.floor((opaqueCount * 3) / 8))
-      URL.revokeObjectURL(objectUrl)
-    }
-  }
+      setCapacity(Math.floor((opaqueCount * 3) / 8));
+      URL.revokeObjectURL(objectUrl);
+    };
+  };
 
   /**
    * Handles file drops on either drop zone.
@@ -63,19 +64,19 @@ function Encode() {
    * @param {'image'|'file'} type
    */
   const handleDrop = (e, type) => {
-    e.preventDefault()
-    const dropped = e.dataTransfer.files[0]
-    if (!dropped) return
+    e.preventDefault();
+    const dropped = e.dataTransfer.files[0];
+    if (!dropped) return;
 
-    if (type === 'image') {
-      setImage(dropped)
-      calculateCapacity(dropped)
+    if (type === "image") {
+      setImage(dropped);
+      calculateCapacity(dropped);
     } else {
-      setFile(dropped)
+      setFile(dropped);
     }
-  }
+  };
 
-  const handleDragOver = (e) => e.preventDefault()
+  const handleDragOver = (e) => e.preventDefault();
 
   /**
    * Toggles encryption on/off.
@@ -83,10 +84,10 @@ function Encode() {
    */
   const handleToggleEncrypt = () => {
     setUseEncrypt((prev) => {
-      if (prev) setPassword('') // clear password when switching OFF
-      return !prev
-    })
-  }
+      if (prev) setPassword(""); // clear password when switching OFF
+      return !prev;
+    });
+  };
 
   // ── Encode ─────────────────────────────────────────────────────────────────
 
@@ -97,26 +98,26 @@ function Encode() {
    */
   const handleEncode = async () => {
     if (!image || !file) {
-      alert('Please provide both a cover image and a secret file.')
-      return
+      alert("Please provide both a cover image and a secret file.");
+      return;
     }
 
     // Password is required only when encryption is enabled
     if (useEncrypt && !password) {
-      alert('Please enter a password, or turn off encryption.')
-      return
+      alert("Please enter a password, or turn off encryption.");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     // Rough pre-flight size warning (actual enforcement is in stego.js)
     if (file.size * 2 > capacity) {
-      alert('File might be too large for the selected image. Trying anyway…')
+      alert("File might be too large for the selected image. Trying anyway…");
     }
 
-    const objectUrl = URL.createObjectURL(image)
-    const img = new window.Image()
-    img.src = objectUrl
+    const objectUrl = URL.createObjectURL(image);
+    const img = new window.Image();
+    img.src = objectUrl;
 
     img.onload = async () => {
       try {
@@ -125,46 +126,55 @@ function Encode() {
           img,
           file,
           useEncrypt ? password : null,
-          canvasRef.current
-        )
-        setStegoUrl(result)
+          canvasRef.current,
+        );
+        setStegoUrl(result);
       } catch (err) {
-        alert(err.message)
+        alert(err.message);
       } finally {
-        setLoading(false)
-        URL.revokeObjectURL(objectUrl)
+        setLoading(false);
+        URL.revokeObjectURL(objectUrl);
       }
-    }
+    };
 
     img.onerror = () => {
-      alert('Failed to load image. Please try a different file.')
-      setLoading(false)
-      URL.revokeObjectURL(objectUrl)
-    }
-  }
+      alert("Failed to load image. Please try a different file.");
+      setLoading(false);
+      URL.revokeObjectURL(objectUrl);
+    };
+  };
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className="encode-container container py-5">
+      {/* HELMET */}
+      <Helmet>
+        <title>Encode — Hide a File in an Image | Stego.Image</title>
+        <meta
+          name="description"
+          content="Upload an image and a secret file. Stego.Image encrypts and hides it using LSB steganography. 100% client-side, no data leaves your browser."
+        />
+        <link rel="canonical" href="https://stegoimage.pages.dev/encode" />
+      </Helmet>
 
       {/* Page header */}
       <div className="text-center text-white mb-4">
         <h1>Encode Data into Image</h1>
         <p className="text-warning small mb-1">
-          ⚠️ Read the instructions below before hiding data — incorrect usage may cause data loss.
+          ⚠️ Read the instructions below before hiding data — incorrect usage
+          may cause data loss.
         </p>
         <p>Embed a file inside an image, with optional AES-256 encryption</p>
       </div>
 
       <div className="row g-4">
-
         {/* Cover image drop zone */}
         <div className="col-md-6">
           <label className="label-text">Cover Image</label>
           <div
             className="drop-zone"
-            onDrop={(e) => handleDrop(e, 'image')}
+            onDrop={(e) => handleDrop(e, "image")}
             onDragOver={handleDragOver}
             onClick={() => imageInputRef.current.click()}
           >
@@ -176,9 +186,9 @@ function Encode() {
               hidden
               ref={imageInputRef}
               onChange={(e) => {
-                const f = e.target.files[0]
-                setImage(f)
-                calculateCapacity(f)
+                const f = e.target.files[0];
+                setImage(f);
+                calculateCapacity(f);
               }}
             />
           </div>
@@ -189,7 +199,7 @@ function Encode() {
           <label className="label-text">Secret File</label>
           <div
             className="drop-zone"
-            onDrop={(e) => handleDrop(e, 'file')}
+            onDrop={(e) => handleDrop(e, "file")}
             onDragOver={handleDragOver}
             onClick={() => fileInputRef.current.click()}
           >
@@ -217,33 +227,33 @@ function Encode() {
         {/* ── Encryption Toggle ── */}
         <div className="col-12">
           <div className="encrypt-toggle-row">
-
             {/* Left: label + status badge */}
             <div className="encrypt-toggle-label">
               <span className="label-text mb-0">Encryption</span>
-              <span className={`encrypt-badge ${useEncrypt ? 'badge-on' : 'badge-off'}`}>
-                {useEncrypt ? '🔒 AES-256 ON' : '🔓 OFF'}
+              <span
+                className={`encrypt-badge ${useEncrypt ? "badge-on" : "badge-off"}`}
+              >
+                {useEncrypt ? "🔒 AES-256 ON" : "🔓 OFF"}
               </span>
             </div>
 
             {/* Right: toggle switch button */}
             <button
               type="button"
-              className={`encrypt-toggle-btn ${useEncrypt ? 'toggle-on' : 'toggle-off'}`}
+              className={`encrypt-toggle-btn ${useEncrypt ? "toggle-on" : "toggle-off"}`}
               onClick={handleToggleEncrypt}
               aria-pressed={useEncrypt}
               aria-label="Toggle AES-256 encryption"
             >
               <span className="toggle-knob" />
             </button>
-
           </div>
 
           {/* Contextual hint below the toggle */}
           <p className="encrypt-hint">
             {useEncrypt
-              ? 'Data will be AES-256 encrypted before embedding. A password is required to decode.'
-              : 'Data will be embedded without encryption. Anyone with the image can extract it.'}
+              ? "Data will be AES-256 encrypted before embedding. A password is required to decode."
+              : "Data will be embedded without encryption. Anyone with the image can extract it."}
           </p>
         </div>
 
@@ -268,8 +278,10 @@ function Encode() {
             onClick={handleEncode}
             disabled={loading}
           >
-            {loading && <span className="spinner-border spinner-border-sm me-2" />}
-            {loading ? 'Encoding…' : 'Execute Encoding'}
+            {loading && (
+              <span className="spinner-border spinner-border-sm me-2" />
+            )}
+            {loading ? "Encoding…" : "Execute Encoding"}
           </button>
         </div>
 
@@ -280,41 +292,56 @@ function Encode() {
             <img
               src={stegoUrl}
               alt="encoded stego preview"
-              style={{ maxWidth: '300px', borderRadius: '10px' }}
+              style={{ maxWidth: "300px", borderRadius: "10px" }}
             />
             <div className="mt-3 d-flex gap-3 justify-content-center flex-wrap">
-              <a href={stegoUrl} download="stego-image.png" className="primary-btn">
+              <a
+                href={stegoUrl}
+                download="stego-image.png"
+                className="primary-btn"
+              >
                 Download PNG
               </a>
-              <button className="primary-btn" onClick={() => downloadZip(stegoUrl)}>
+              <button
+                className="primary-btn"
+                onClick={() => downloadZip(stegoUrl)}
+              >
                 Download ZIP (Safe Share)
               </button>
             </div>
             <p className="text-warning mt-3 small">
-              ⚠️ Sharing the PNG directly via WhatsApp, Instagram, etc. may destroy
-              hidden data due to image compression. Use the ZIP option for safe sharing.
+              ⚠️ Sharing the PNG directly via WhatsApp, Instagram, etc. may
+              destroy hidden data due to image compression. Use the ZIP option
+              for safe sharing.
             </p>
           </div>
         )}
-
       </div>
 
       {/* Hidden canvas used by the steganography engine */}
-      <canvas ref={canvasRef} style={{ display: 'none' }} />
+      <canvas ref={canvasRef} style={{ display: "none" }} />
 
       {/* Instructions */}
       <div className="info-box mt-4">
         <h5>Instructions</h5>
         <ul>
-          <li>Use <strong>PNG or BMP</strong> only — JPEG compression will destroy hidden data.</li>
-          <li>Encryption <strong>ON</strong>: set a strong password. <strong>OFF</strong>: anyone can extract the data.</li>
+          <li>
+            Use <strong>PNG or BMP</strong> only — JPEG compression will destroy
+            hidden data.
+          </li>
+          <li>
+            Encryption <strong>ON</strong>: set a strong password.{" "}
+            <strong>OFF</strong>: anyone can extract the data.
+          </li>
           <li>Secret file size must not exceed the capacity shown above.</li>
-          <li>Use <strong>Download ZIP</strong> for sharing — direct PNG sharing (WhatsApp, etc.) may corrupt data.</li>
+          <li>
+            Use <strong>Download ZIP</strong> for sharing — direct PNG sharing
+            (WhatsApp, etc.) may corrupt data.
+          </li>
         </ul>
       </div>
-
     </div>
-  )
+  );
 }
 
-export default Encode
+export default Encode;

@@ -1,48 +1,73 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 /** Feature cards data — update here without touching JSX. */
 const FEATURES = [
   {
-    title: 'Encryption',
-    desc:  'Protect data using AES-based password encryption before embedding.',
+    title: "Encryption",
+    desc: "Protect data using AES-based password encryption before embedding.",
   },
   {
-    title: 'Steganography',
-    desc:  'Embed binary data into image pixels using the least significant bit method.',
+    title: "Steganography",
+    desc: "Embed binary data into image pixels using the least significant bit method.",
   },
   {
-    title: 'Client-Side Processing',
-    desc:  'All operations run in the browser — no data is ever sent to a server.',
+    title: "Client-Side Processing",
+    desc: "All operations run in the browser — no data is ever sent to a server.",
   },
   {
-    title: 'Multi File Support',
-    desc:  'Support for any file type through compression and packaging.',
+    title: "Multi File Support",
+    desc: "Support for any file type through compression and packaging.",
   },
-]
+];
 
 /** Workflow steps shown in the "How It Works" section. */
 const STEPS = [
-  { num: 1, title: 'Upload',   desc: 'Select a cover image and the secret file to hide.' },
-  { num: 2, title: 'Encrypt',  desc: 'Data is encrypted with your chosen password.' },
-  { num: 3, title: 'Embed',    desc: 'Encrypted data is hidden in the image pixels.' },
-  { num: 4, title: 'Download', desc: 'Download and share the stego image securely.' },
-]
+  {
+    num: 1,
+    title: "Upload",
+    desc: "Select a cover image and the secret file to hide.",
+  },
+  {
+    num: 2,
+    title: "Encrypt",
+    desc: "Data is encrypted with your chosen password.",
+  },
+  {
+    num: 3,
+    title: "Embed",
+    desc: "Encrypted data is hidden in the image pixels.",
+  },
+  {
+    num: 4,
+    title: "Download",
+    desc: "Download and share the stego image securely.",
+  },
+];
 
 /**
  * Home — landing page with hero, features, workflow, security info, and CTA.
  */
 function Home() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="home-container">
+      {/* HELMET */}
+      <Helmet>
+        <title>Hide Files in Images — Stego.Image</title>
+        <meta
+          name="description"
+          content="Free client-side steganography tool. Hide any file inside a PNG using AES-256 encryption and LSB steganography. No uploads, no servers."
+        />
+        <link rel="canonical" href="https://stegoimage.pages.dev/" />
+      </Helmet>
 
       {/* ── HERO ── */}
       <section className="hero-section">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-8 col-md-10 text-center">
-
               <h1 className="glow-text">Stego.Image</h1>
 
               <p className="hero-text">
@@ -52,10 +77,19 @@ function Home() {
               </p>
 
               <div className="hero-buttons mt-4">
-                <button className="primary-btn m-1"   onClick={() => navigate('/encode')}>Start Encoding</button>
-                <button className="secondary-btn m-1" onClick={() => navigate('/decode')}>Extract Data</button>
+                <button
+                  className="primary-btn m-1"
+                  onClick={() => navigate("/encode")}
+                >
+                  Start Encoding
+                </button>
+                <button
+                  className="secondary-btn m-1"
+                  onClick={() => navigate("/decode")}
+                >
+                  Extract Data
+                </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -84,7 +118,9 @@ function Home() {
           {STEPS.map(({ num, title, desc }) => (
             <div className="col-md-3" key={num}>
               <div className="card h-100">
-                <h4>{num}. {title}</h4>
+                <h4>
+                  {num}. {title}
+                </h4>
                 <p>{desc}</p>
               </div>
             </div>
@@ -95,14 +131,13 @@ function Home() {
       {/* ── SECURITY ── */}
       <section className="container py-5">
         <div className="row align-items-center">
-
           <div className="col-md-6 text-white">
             <h2>Security and Privacy</h2>
             <p className="mb-3">
               All processing happens locally in your browser — no files are
               transmitted or stored on external servers.
             </p>
-            <ul className="text-white" style={{ paddingLeft: '18px' }}>
+            <ul className="text-white" style={{ paddingLeft: "18px" }}>
               <li>Password-based encryption ensures confidentiality</li>
               <li>Hidden data is indistinguishable from normal image data</li>
               <li>No network communication — maximum privacy guaranteed</li>
@@ -119,7 +154,6 @@ function Home() {
               </ul>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -130,13 +164,15 @@ function Home() {
           Encode your first file and experience secure data hiding directly in
           your browser.
         </p>
-        <button className="primary-btn mt-3" onClick={() => navigate('/encode')}>
+        <button
+          className="primary-btn mt-3"
+          onClick={() => navigate("/encode")}
+        >
           Begin Encoding
         </button>
       </section>
-
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
