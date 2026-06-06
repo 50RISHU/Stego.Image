@@ -25,4 +25,46 @@
     <priority>0.6</priority>
   </url>
 
+  <url>
+    <loc>https://stegoimage.pages.dev/learn/how-steganography-works</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://stegoimage.pages.dev/learn/lsb-steganography</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://stegoimage.pages.dev/learn/image-steganography</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://stegoimage.pages.dev/learn/aes256-encryption</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://stegoimage.pages.dev/learn/steganography-vs-encryption</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://stegoimage.pages.dev/learn/detect-hidden-data</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://stegoimage.pages.dev/learn/use-cases</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
