@@ -92,7 +92,7 @@ function SteganographyVsEncryption() {
   return (
     <div className="container py-5">
       <Helmet>
-        <title>Steganography vs Encryption — Stego.Image</title>
+        <title>Steganography vs Encryption — Key Differences Explained | Stego.Image</title>
         <meta
           name="description"
           content="Understand the difference between steganography and encryption — how they work, when to use each, and why combining both provides the strongest protection."
@@ -103,7 +103,7 @@ function SteganographyVsEncryption() {
         />
         <meta
           property="og:title"
-          content="Steganography vs Encryption — Stego.Image"
+          content="Steganography vs Encryption — Key Differences Explained | Stego.Image"
         />
         <meta property="og:type" content="article" />
       </Helmet>

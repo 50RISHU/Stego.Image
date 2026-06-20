@@ -167,8 +167,8 @@ export default function Home() {
   return (
     <div style={{ background: "#0d1117", color: "#e6edf3" }}>
       <Helmet>
-        <title>Hide Files in Images — Stego.Image</title>
-        <meta name="description" content="Free client-side steganography tool. Hide any file inside a PNG using AES-256 encryption and LSB steganography. No uploads, no servers." />
+        <title>Steganography Online — Hide Any File in a PNG | Stego.Image</title>
+        <meta name="description" content="Free online steganography tool. Hide any file inside a PNG image using LSB steganography and AES-256 encryption. 100% client-side — no uploads, no servers, no tracking." />
         <link rel="canonical" href="https://stegoimage.pages.dev/" />
       </Helmet>
 

@@ -66,7 +66,7 @@ function LsbSteganography() {
   return (
     <div className="container py-5">
       <Helmet>
-        <title>LSB Steganography — Stego.Image</title>
+        <title>LSB Steganography Explained — Least Significant Bit Technique | Stego.Image</title>
         <meta
           name="description"
           content="Learn how LSB steganography works — hiding secret data in the least significant bits of image pixels. Covers binary encoding, capacity, and detection."
@@ -75,7 +75,7 @@ function LsbSteganography() {
           rel="canonical"
           href="https://stegoimage.pages.dev/learn/lsb-steganography"
         />
-        <meta property="og:title" content="LSB Steganography — Stego.Image" />
+        <meta property="og:title" content="LSB Steganography Explained — Least Significant Bit Technique | Stego.Image" />
         <meta property="og:type" content="article" />
       </Helmet>
 

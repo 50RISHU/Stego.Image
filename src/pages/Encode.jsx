@@ -150,7 +150,7 @@ function Encode() {
     <div className="encode-container container py-5">
       {/* HELMET */}
       <Helmet>
-        <title>Encode — Hide a File in an Image | Stego.Image</title>
+        <title>Hide a File in an Image Online — LSB Steganography Encoder | Stego.Image</title>
         <meta
           name="description"
           content="Upload an image and a secret file. Stego.Image encrypts and hides it using LSB steganography. 100% client-side, no data leaves your browser."

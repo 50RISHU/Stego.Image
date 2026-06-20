@@ -122,7 +122,7 @@ function ImageSteganography() {
   return (
     <div className="container py-5">
       <Helmet>
-        <title>Image Steganography — Stego.Image</title>
+        <title>Image Steganography — Hide Data Inside Images | Stego.Image</title>
         <meta
           name="description"
           content="Learn how image steganography works, why PNG is required over JPEG, how file format affects hidden data survival, and which platforms destroy stego images."
@@ -131,7 +131,7 @@ function ImageSteganography() {
           rel="canonical"
           href="https://stegoimage.pages.dev/learn/image-steganography"
         />
-        <meta property="og:title" content="Image Steganography — Stego.Image" />
+        <meta property="og:title" content="Image Steganography — Hide Data Inside Images | Stego.Image" />
         <meta property="og:type" content="article" />
       </Helmet>
 

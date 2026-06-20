@@ -90,7 +90,7 @@ function DetectHiddenData() {
   return (
     <div className="container py-5">
       <Helmet>
-        <title>Detect Hidden Data in Images — Stego.Image</title>
+        <title>How to Detect Hidden Data in Images — Steganalysis Guide | Stego.Image</title>
         <meta
           name="description"
           content="Learn how steganalysis tools detect hidden data in images. Covers chi-square attacks, RS analysis, LSB visualisation, and how encryption makes detection harder."
@@ -101,7 +101,7 @@ function DetectHiddenData() {
         />
         <meta
           property="og:title"
-          content="Detect Hidden Data in Images — Stego.Image"
+          content="How to Detect Hidden Data in Images — Steganalysis Guide | Stego.Image"
         />
         <meta property="og:type" content="article" />
       </Helmet>

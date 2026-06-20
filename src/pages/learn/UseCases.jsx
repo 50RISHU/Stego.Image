@@ -102,7 +102,7 @@ function UseCases() {
   return (
     <div className="container py-5">
       <Helmet>
-        <title>Steganography Use Cases — Stego.Image</title>
+        <title>Steganography Use Cases — Real-World Applications | Stego.Image</title>
         <meta
           name="description"
           content="Explore real-world use cases for steganography — private file transfer, covert communication, digital watermarking, dead drops, secure backup, and security research."
@@ -113,7 +113,7 @@ function UseCases() {
         />
         <meta
           property="og:title"
-          content="Steganography Use Cases — Stego.Image"
+          content="Steganography Use Cases — Real-World Applications | Stego.Image"
         />
         <meta property="og:type" content="article" />
       </Helmet>

@@ -108,7 +108,7 @@ function Decode() {
     <div className="decode-container container py-5">
       {/* HELMET */}
       <Helmet>
-        <title>Decode — Extract Hidden Files from an Image | Stego.Image</title>
+        <title>Extract Hidden File from Image Online — Steganography Decoder | Stego.Image</title>
         <meta
           name="description"
           content="Extract and decrypt files hidden inside images. Upload your stego image and password to recover the original file. Fully client-side."

@@ -66,7 +66,7 @@ function HowSteganographyWorks() {
   return (
     <div className="container py-5">
       <Helmet>
-        <title>How Steganography Works — Stego.Image</title>
+        <title>How Steganography Works — Beginner's Guide | Stego.Image</title>
         <meta
           name="description"
           content="Learn how steganography works — the technique of hiding secret data inside ordinary image files using LSB encoding and AES-256 encryption."
@@ -77,7 +77,7 @@ function HowSteganographyWorks() {
         />
         <meta
           property="og:title"
-          content="How Steganography Works — Stego.Image"
+          content="How Steganography Works — Beginner's Guide | Stego.Image"
         />
         <meta property="og:type" content="article" />
       </Helmet>

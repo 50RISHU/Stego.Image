@@ -84,7 +84,7 @@ function Aes256Encryption() {
   return (
     <div className="container py-5">
       <Helmet>
-        <title>AES-256 Encryption — Stego.Image</title>
+        <title>AES-256 Encryption Explained — How It Protects Hidden Data | Stego.Image</title>
         <meta
           name="description"
           content="Learn how Stego.Image uses AES-256 encryption with PBKDF2-SHA256 key derivation to protect hidden files. Covers the full encrypt and decrypt pipeline."
@@ -93,7 +93,7 @@ function Aes256Encryption() {
           rel="canonical"
           href="https://stegoimage.pages.dev/learn/aes256-encryption"
         />
-        <meta property="og:title" content="AES-256 Encryption — Stego.Image" />
+        <meta property="og:title" content="AES-256 Encryption Explained — How It Protects Hidden Data | Stego.Image" />
         <meta property="og:type" content="article" />
       </Helmet>
 

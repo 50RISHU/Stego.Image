@@ -129,7 +129,7 @@ export default function About() {
   return (
     <div style={{ background: "#0d1117", color: "#e6edf3" }}>
       <Helmet>
-        <title>About — Stego.Image</title>
+        <title>About Stego.Image — Free Client-Side Steganography Tool</title>
         <meta name="description" content="Learn about Stego.Image — an open-source, client-side steganography tool built with React, AES-256 encryption, and LSB pixel encoding." />
         <link rel="canonical" href="https://stegoimage.pages.dev/about" />
       </Helmet>
