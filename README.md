@@ -24,14 +24,14 @@
 ## About
 
 Stego.Image is a secure, client-side steganography tool that hides any file
-inside a PNG image using AES-256 encryption and GZIP compression. All
+inside a PNG image using AES-256 encryption and DEFLATE compression. All
 operations run entirely in your browser — no data ever touches a server.
 
 ---
 
 ## How It Works
 ```
-File → GZIP compress → AES-256 encrypt → LSB embed into pixels → PNG output
+File → DEFLATE compress → AES-256 encrypt → LSB embed into pixels → PNG output
 ```
 
 **LSB (Least Significant Bit) steganography** modifies only the last bit of
@@ -52,7 +52,7 @@ Two independent security layers:
 ## Features
 
 - **AES-256 Encryption** — PBKDF2-SHA256 key derivation at 100,000 iterations with a random salt
-- **GZIP Compression** — shrinks the payload before embedding to maximise image capacity
+- **DEFLATE Compression** — shrinks the payload before embedding to maximise image capacity
 - **LSB Steganography** — pixel-level data hiding using the HTML5 Canvas API
 - **Any File Type** — PDF, ZIP, images, video, code, documents
 - **Capacity Indicator** — shows available space before encoding
@@ -82,7 +82,7 @@ and extracted, AES-256 makes it unreadable without the correct password.
 | Framework | React 19 + Vite |
 | Styling | Bootstrap 5 |
 | Encryption | crypto-js (AES-256, PBKDF2-SHA256) |
-| Compression | pako (GZIP) |
+| Compression | pako (DEFLATE) |
 | File handling | file-saver, jszip |
 | File upload | react-dropzone |
 | Routing | react-router-dom |
