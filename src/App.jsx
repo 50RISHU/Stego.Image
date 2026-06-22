@@ -1,7 +1,8 @@
-import { HelmetProvider } from 'react-helmet-async'
-import Navbar             from './components/Navbar'
-import Footer             from './components/Footer'
-import { Routes, Route }  from 'react-router-dom'
+import { HelmetProvider }          from 'react-helmet-async'
+import { Component }               from 'react'
+import Navbar                      from './components/Navbar'
+import Footer                      from './components/Footer'
+import { Routes, Route }           from 'react-router-dom'
 import './App.css'
 
 import Home   from './pages/Home'
@@ -17,25 +18,53 @@ import SteganographyVsEncryption from './pages/learn/SteganographyVsEncryption'
 import DetectHiddenData          from './pages/learn/DetectHiddenData'
 import UseCases                  from './pages/learn/UseCases'
 
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { error: null }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error }
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="d-flex flex-column align-items-center justify-content-center py-5 text-center">
+          <h2 className="mb-3">Something went wrong</h2>
+          <p className="text-muted mb-4">{this.state.error.message}</p>
+          <button className="btn btn-primary" onClick={() => this.setState({ error: null })}>
+            Try again
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
 function App() {
   return (
     <HelmetProvider>
       <div className="app-container d-flex flex-column min-vh-100">
         <Navbar />
         <div className="flex-grow-1">
-          <Routes>
-            <Route path="/"                                  element={<Home />}   />
-            <Route path="/encode"                            element={<Encode />} />
-            <Route path="/decode"                            element={<Decode />} />
-            <Route path="/about"                             element={<About />}  />
-            <Route path="/learn/how-steganography-works"     element={<HowSteganographyWorks />} />
-            <Route path="/learn/lsb-steganography"           element={<LsbSteganography />} />
-            <Route path="/learn/image-steganography"         element={<ImageSteganography />} />
-            <Route path="/learn/aes256-encryption"           element={<Aes256Encryption />} />
-            <Route path="/learn/steganography-vs-encryption" element={<SteganographyVsEncryption />} />
-            <Route path="/learn/detect-hidden-data"          element={<DetectHiddenData />} />
-            <Route path="/learn/use-cases"                   element={<UseCases />} />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/"                                  element={<Home />}   />
+              <Route path="/encode"                            element={<Encode />} />
+              <Route path="/decode"                            element={<Decode />} />
+              <Route path="/about"                             element={<About />}  />
+              <Route path="/learn/how-steganography-works"     element={<HowSteganographyWorks />} />
+              <Route path="/learn/lsb-steganography"           element={<LsbSteganography />} />
+              <Route path="/learn/image-steganography"         element={<ImageSteganography />} />
+              <Route path="/learn/aes256-encryption"           element={<Aes256Encryption />} />
+              <Route path="/learn/steganography-vs-encryption" element={<SteganographyVsEncryption />} />
+              <Route path="/learn/detect-hidden-data"          element={<DetectHiddenData />} />
+              <Route path="/learn/use-cases"                   element={<UseCases />} />
+            </Routes>
+          </ErrorBoundary>
         </div>
         <Footer />
       </div>
