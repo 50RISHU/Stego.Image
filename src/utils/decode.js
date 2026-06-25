@@ -1,21 +1,17 @@
 /**
  * LSB steganography decoder.
  *
- * Pipeline: image pixels → read LSBs → parse metadata → AES-256 decrypt (if encrypted) → GZIP decompress
+ * Pipeline: image pixels → read LSBs → AES-256 decrypt → verify magic → DEFLATE decompress
  *
- * The `encrypted` flag in the metadata header — not the UI toggle — determines
- * whether decryption is attempted.
+ * Everything is encrypted — no plaintext metadata exists in the image.
+ * Wrong password produces garbage on decrypt; magic byte check catches it cleanly.
  */
 
 import { decryptData }    from "./encryption";
 import { decompressData } from "./compression";
 
-/**
- * Packs groups of 8 bits back into bytes, MSB first.
- * Out-of-bounds reads are treated as 0 (zero-padded).
- * @param   {number[]} bits
- * @returns {Uint8Array}
- */
+const MAGIC = new Uint8Array([0x53, 0x54, 0x47, 0x4F]); // "STGO"
+
 function bitsToBytes(bits) {
   const bytes = [];
   for (let i = 0; i < bits.length; i += 8) {
@@ -28,21 +24,33 @@ function bitsToBytes(bits) {
   return new Uint8Array(bytes);
 }
 
+function readUint32(bytes, offset) {
+  return (
+    (bytes[offset]     << 24) |
+    (bytes[offset + 1] << 16) |
+    (bytes[offset + 2] <<  8) |
+     bytes[offset + 3]
+  ) >>> 0;
+}
+
 /**
  * Extracts a hidden file from a stego image.
- * The image must be a lossless PNG that has not been re-compressed by any platform.
  * @param   {HTMLImageElement}  img      - Stego image element.
  * @param   {HTMLCanvasElement} canvas   - Off-screen canvas for pixel reading.
- * @param   {string|null}       password - Decryption password, or null if not encrypted.
+ * @param   {string}            password - Decryption password.
  * @returns {Promise<{ blob: Blob, fileName: string }>}
- * @throws  {Error} If the image is invalid, the password is wrong, or the file is corrupted.
+ * @throws  {Error} If the password is wrong or the image has no hidden data.
  */
 export async function decodeImage(img, canvas, password) {
+  if (!password) {
+    throw new Error("Password is required to decode this image.");
+  }
+
   const ctx = canvas.getContext("2d");
   canvas.width  = img.width;
   canvas.height = img.height;
 
-  ctx.imageSmoothingEnabled = false; // ensure raw pixel values, no interpolation
+  ctx.imageSmoothingEnabled = false;
   ctx.drawImage(img, 0, 0);
 
   const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
@@ -59,56 +67,61 @@ export async function decodeImage(img, canvas, password) {
 
   const bytes = bitsToBytes(bits);
 
-  // First 4 bytes are the metadata length as a big-endian uint32
-  const metaLength =
-    (bytes[0] << 24) |
-    (bytes[1] << 16) |
-    (bytes[2] <<  8) |
-     bytes[3];
+  // First 4 bytes = encrypted blob size
+  const encryptedSize = readUint32(bytes, 0);
 
-  if (!metaLength || metaLength > bytes.length) {
-    throw new Error("Invalid stego image.");
+  if (!encryptedSize || encryptedSize > bytes.length - 4) {
+    throw new Error("No hidden data found in this image.");
   }
 
-  // Parse JSON metadata immediately after the 4-byte prefix
-  let metadata;
+  const encryptedBlob = bytes.slice(4, 4 + encryptedSize);
+
+  // Decrypt everything — wrong password will throw here
+  let plaintext;
   try {
-    metadata = JSON.parse(new TextDecoder().decode(bytes.slice(4, 4 + metaLength)));
+    plaintext = decryptData(encryptedBlob, password);
   } catch {
-    throw new Error("Invalid stego image or corrupted metadata.");
+    throw new Error("Wrong password or this image has no hidden data.");
   }
 
-  if (metadata.signature !== "STEGO_V1") {
-    throw new Error("Invalid stego image.");
+  // Verify magic bytes "STGO"
+  if (
+    plaintext[0] !== MAGIC[0] ||
+    plaintext[1] !== MAGIC[1] ||
+    plaintext[2] !== MAGIC[2] ||
+    plaintext[3] !== MAGIC[3]
+  ) {
+    throw new Error("Wrong password or this image has no hidden data.");
   }
 
-  // Slice exactly encryptedSize bytes to avoid trailing pixel noise
-  const payloadStart = 4 + metaLength;
-  const payloadEnd   = metadata.encryptedSize ? payloadStart + metadata.encryptedSize : undefined;
-  const payloadBytes = bytes.slice(payloadStart, payloadEnd);
+  // Parse: [4B magic][4B name len][name][4B type len][type][4B orig size][compressed payload]
+  let offset = 4;
 
-  // Decrypt then decompress, or just decompress if not encrypted
+  const nameLen  = readUint32(plaintext, offset); offset += 4;
+  const fileName = new TextDecoder().decode(plaintext.slice(offset, offset + nameLen)); offset += nameLen;
+
+  const typeLen  = readUint32(plaintext, offset); offset += 4;
+  const mimeType = new TextDecoder().decode(plaintext.slice(offset, offset + typeLen)); offset += typeLen;
+
+  const origSize = readUint32(plaintext, offset); offset += 4;
+
+  const compressedPayload = plaintext.slice(offset);
+
+  // Decompress
   let decodedBytes;
-  if (metadata.encrypted) {
-    if (!password) {
-      throw new Error("This image was encoded with encryption. Please enter the password.");
-    }
-    decodedBytes = decompressData(decryptData(payloadBytes, password));
-  } else {
-    decodedBytes = decompressData(payloadBytes);
+  try {
+    decodedBytes = decompressData(compressedPayload);
+  } catch {
+    throw new Error("Wrong password or corrupted data.");
   }
 
-  // Output length must match the original file size stored in metadata
-  if (decodedBytes.length !== metadata.size) {
-    throw new Error(
-      metadata.encrypted
-        ? "Wrong password or corrupted file."
-        : "Corrupted file or mismatched encryption settings."
-    );
+  // Final size check
+  if (decodedBytes.length !== origSize) {
+    throw new Error("Wrong password or corrupted data.");
   }
 
   return {
-    blob:     new Blob([decodedBytes], { type: metadata.type || "application/octet-stream" }),
-    fileName: metadata.name,
+    blob:     new Blob([decodedBytes], { type: mimeType }),
+    fileName,
   };
 }

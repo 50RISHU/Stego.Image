@@ -1,10 +1,10 @@
 /**
  * LSB steganography encoder.
  *
- * Pipeline: file → GZIP compress → AES-256 encrypt (optional) → embed in image pixels
+ * Pipeline: file → DEFLATE compress → AES-256 encrypt (single block with metadata) → embed in image pixels
  *
- * Binary stream layout:
- *   [ 4B: metadata length ] [ N bytes: JSON metadata ] [ payload ]
+ * Binary stream layout (all encrypted as one block):
+ *   encrypt( [4B magic "STGO"] [4B filename length] [filename bytes] [4B mimetype length] [mimetype bytes] [4B original size] [compressed payload] )
  *
  * Only fully opaque pixels (alpha === 255) are used.
  * Capacity: ⌊(opaque pixels × 3) / 8⌋ bytes
@@ -13,11 +13,8 @@
 import { compressData } from "./compression";
 import { encryptData }  from "./encryption";
 
-/**
- * Unpacks each byte into 8 bits, MSB first.
- * @param   {Uint8Array} bytes
- * @returns {number[]}
- */
+const MAGIC = new Uint8Array([0x53, 0x54, 0x47, 0x4F]); // "STGO"
+
 function bytesToBits(bytes) {
   const bits = [];
   for (let b of bytes) {
@@ -28,11 +25,21 @@ function bytesToBits(bytes) {
   return bits;
 }
 
+function uint32ToBytes(n) {
+  return new Uint8Array([
+    (n >> 24) & 0xff,
+    (n >> 16) & 0xff,
+    (n >>  8) & 0xff,
+     n        & 0xff,
+  ]);
+}
+
 /**
  * Hides a secret file inside a cover image using LSB steganography.
+ * Metadata and payload are encrypted together — no plaintext is embedded.
  * @param   {HTMLImageElement}  img      - Cover image element.
  * @param   {File}              file     - Secret file to embed.
- * @param   {string|null}       password - Encryption password, or null to skip encryption.
+ * @param   {string}            password - Encryption password.
  * @param   {HTMLCanvasElement} canvas   - Off-screen canvas for pixel manipulation.
  * @returns {Promise<string>}              Data URL of the output PNG.
  * @throws  {Error} If the file is too large for the cover image.
@@ -46,32 +53,38 @@ export async function encodeImage(img, file, password, canvas) {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const pixels    = imageData.data;
 
-  const fileBuffer  = await file.arrayBuffer();
-  const compressed  = compressData(new Uint8Array(fileBuffer));
-  const isEncrypted = Boolean(password);
-  const payload     = isEncrypted ? encryptData(compressed, password) : compressed;
+  const fileBuffer = await file.arrayBuffer();
+  const compressed = compressData(new Uint8Array(fileBuffer));
 
-  // Build metadata header; `encrypted` flag tells the decoder whether to decrypt
-  const metadata = JSON.stringify({
-    signature:     "STEGO_V1",
-    name:          file.name,
-    type:          file.type,
-    size:          file.size,
-    encrypted:     isEncrypted,
-    encryptedSize: payload.length,
-  });
+  const nameBytes = new TextEncoder().encode(file.name);
+  const typeBytes = new TextEncoder().encode(file.type || "application/octet-stream");
+  const sizeBytes = uint32ToBytes(file.size);
 
-  const metaBytes  = new TextEncoder().encode(metadata);
-  const metaLength = metaBytes.length;
+  // Build plaintext block: [STGO][4B name len][name][4B type len][type][4B orig size][compressed payload]
+  const plaintext = new Uint8Array(
+    4 +
+    4 + nameBytes.length +
+    4 + typeBytes.length +
+    4 +
+    compressed.length
+  );
 
-  // Assemble: [4B big-endian length][metadata][payload]
-  const byteStream = new Uint8Array(4 + metaLength + payload.length);
-  byteStream[0] = (metaLength >> 24) & 255;
-  byteStream[1] = (metaLength >> 16) & 255;
-  byteStream[2] = (metaLength >>  8) & 255;
-  byteStream[3] =  metaLength        & 255;
-  byteStream.set(metaBytes, 4);
-  byteStream.set(payload,   4 + metaLength);
+  let offset = 0;
+  plaintext.set(MAGIC,                    offset); offset += 4;
+  plaintext.set(uint32ToBytes(nameBytes.length), offset); offset += 4;
+  plaintext.set(nameBytes,                offset); offset += nameBytes.length;
+  plaintext.set(uint32ToBytes(typeBytes.length), offset); offset += 4;
+  plaintext.set(typeBytes,                offset); offset += typeBytes.length;
+  plaintext.set(sizeBytes,                offset); offset += 4;
+  plaintext.set(compressed,               offset);
+
+  // Encrypt the entire block — metadata + payload, nothing left in plaintext
+  const encrypted = encryptData(plaintext, password);
+
+  // Prepend total encrypted size as 4B so decoder knows when to stop reading
+  const byteStream = new Uint8Array(4 + encrypted.length);
+  byteStream.set(uint32ToBytes(encrypted.length), 0);
+  byteStream.set(encrypted, 4);
 
   const bits = bytesToBits(byteStream);
 
@@ -91,12 +104,12 @@ export async function encodeImage(img, file, password, canvas) {
     if (pixels[i + 3] === 255) {
       for (let j = 0; j < 3; j++) {
         if (bitIndex < bits.length) {
-          pixels[i + j] = (pixels[i + j] & 254) | bits[bitIndex++]; // clear LSB, set new bit
+          pixels[i + j] = (pixels[i + j] & 254) | bits[bitIndex++];
         }
       }
     }
   }
 
   ctx.putImageData(imageData, 0, 0);
-  return canvas.toDataURL("image/png"); // PNG is required — JPEG would destroy the LSBs
+  return canvas.toDataURL("image/png");
 }
