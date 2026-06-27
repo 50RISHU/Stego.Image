@@ -1,103 +1,95 @@
-# Contributing to Stego.Image
+# Contributing to StegoImage
 
-Welcome! We're glad you want to contribute. This guide is written for beginners — no experience needed.
+Thank you for helping improve this project. This guide is simple and beginner-friendly.
 
----
+## Requirements
 
-## Before You Start
+Make sure you have:
 
-- You'll need [Git](https://git-scm.com) and [Node.js 18+](https://nodejs.org) installed
-- Read this whole guide before opening your first PR
+- [Git](https://git-scm.com)
+- [Node.js 18+](https://nodejs.org)
 
----
-
-## Step 1 — Fork & Clone
-
-1. Click **Fork** on the top right of this repo
-2. Clone your fork to your computer:
+## Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/stego.image.git
-cd stego.image
+git clone https://github.com/50RISHU/Stego.Image.git
+cd StegoImage
 npm install
 npm run dev
 ```
 
----
+Open the local URL shown in the terminal, usually `http://localhost:5173`.
 
-## Step 2 — Create a Branch
+## Create a Branch
 
-Never work directly on `main`. Always create a new branch:
+Never work directly on `main`. Create a new branch for your change.
 
 ```bash
-git checkout -b fix/my-bug-fix
+git checkout -b fix/typo-on-encode-page
 ```
 
-Use one of these prefixes:
+### Branch Naming Table
 
-| Prefix | Use it for |
-|--------|------------|
-| `feat/` | Adding something new |
-| `fix/` | Fixing a bug |
-| `docs/` | Updating documentation |
-| `chore/` | Small cleanup or config |
+| Type | Use for | Example |
+|------|---------|---------|
+| `feat/` | New feature | `feat/add-image-preview` |
+| `fix/` | Bug fix | `fix/encode-button-error` |
+| `docs/` | Documentation | `docs/improve-contributing-guide` |
+| `chore/` | Small cleanup | `chore/update-dependencies` |
 
----
+## Make Your Changes
 
-## Step 3 — Make Your Changes
+Keep changes small and focused.
 
-- Keep changes **small and focused** — one fix or one feature per PR
-- Test your changes in the browser before submitting
-- Make sure `npm run build` runs without errors
+- Fix one issue at a time
+- Keep the code easy to read
+- Test the app in the browser before submitting
 
----
+## Commit Your Changes
 
-## Step 4 — Commit Your Changes
-
-Write a clear commit message that explains what you did:
+After your changes, commit them with a clear message.
 
 ```bash
+git status
 git add .
 git commit -m "fix: correct typo on encode page"
-git push origin fix/my-bug-fix
 ```
 
-**Good commit messages:**
-```
+### Good Commit Message Examples
+
+```text
 feat: add file size warning before encoding
 fix: prevent crash when image is too small
-docs: fix broken link in README
+docs: improve contributor instructions
 ```
 
-**Bad commit messages:**
-```
+### Bad Commit Message Examples
+
+```text
 update stuff
 fix
 asdfgh
 ```
 
----
+## Push and Open a Pull Request
 
-## Step 5 — Open a Pull Request
+```bash
+git push origin fix/typo-on-encode-page
+```
 
-1. Go to your fork on GitHub
-2. Click **Compare & pull request**
-3. Fill in what you changed and why
-4. Submit — a maintainer will review it
+Then open a pull request on GitHub and explain:
 
----
+- what you changed
+- why you changed it
+- how you tested it
 
-## Ground Rules
+## Guidelines
 
-- **Be kind.** Everyone here is learning.
-- **Ask before big changes.** Open an issue first if you want to redesign something major.
-- **Don't add trackers or external APIs.** This app is 100% private and client-side — keep it that way.
-- **One thing per PR.** Don't mix a bug fix with a new feature in the same PR.
+- Be respectful and kind
+- Keep each pull request focused on one thing
+- Do not add trackers, analytics, or external APIs without discussion
+- Ask before making large design changes
 
----
+## Need Help?
 
-## Not Sure Where to Start?
-
-Look for issues tagged **`good first issue`** — these are picked specifically for new contributors.
-
-If you're stuck, leave a comment on the issue and someone will help you.
+If you are stuck, ask for help in the issue or pull request. Small tasks like typo fixes, text improvements, or UI cleanup are a great place to start.
