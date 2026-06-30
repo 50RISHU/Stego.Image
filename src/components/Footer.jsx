@@ -1,73 +1,149 @@
 /**
  * Footer — site-wide bottom bar.
- * Minimalist design focusing on copyright, MIT license, and open-source links.
  */
 
+import pkg from "../../package.json";
+import {
+  FaGithub,
+  FaBug,
+  FaTag,
+} from "react-icons/fa";
+import { HiDocumentText } from "react-icons/hi2";
+
 export default function Footer() {
-  const GH_LINK = "https://github.com/50RISHU/Stego.Image/blob/main/LICENSE";
+  const GITHUB_URL = "https://github.com/50RISHU/Stego.Image";
+  const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
+  const ISSUES_URL = `${GITHUB_URL}/issues`;
+  const RELEASES_URL = `${GITHUB_URL}/releases`;
+
+  const buttonStyle = {
+    border: "1px solid #30363d",
+    color: "#c9d1d9",
+    background: "transparent",
+    borderRadius: "8px",
+    padding: "8px 16px",
+    fontSize: "0.875rem",
+    textDecoration: "none",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    transition: "all 0.2s ease",
+  };
+
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.background = "#21262d";
+    e.currentTarget.style.borderColor = "#58a6ff";
+    e.currentTarget.style.color = "#ffffff";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.background = "transparent";
+    e.currentTarget.style.borderColor = "#30363d";
+    e.currentTarget.style.color = "#c9d1d9";
+  };
 
   return (
-    <footer 
-      className="mt-auto" 
-      style={{ 
-        borderTop: "1px solid #30363d", 
-        backgroundColor: "rgba(22,27,34,0.5)",
-        backdropFilter: "blur(12px)"
+    <footer
+      className="mt-auto"
+      style={{
+        borderTop: "1px solid #30363d",
+        background: "rgba(22, 27, 34, 0.5)",
+        backdropFilter: "blur(12px)",
       }}
     >
-      <div className="container py-4 text-center">
+      <div
+        className="container text-center py-4"
+        style={{ maxWidth: "720px" }}
+      >
         {/* Copyright */}
-        <p className="mb-2" style={{ color: "#c9d1d9", fontSize: "1rem" }}>
+        <h6
+          className="mb-3"
+          style={{
+            color: "#c9d1d9",
+            fontWeight: 600,
+          }}
+        >
           © {new Date().getFullYear()} <strong>50RISHU</strong> — Stego.Image
+        </h6>
+
+        {/* Description */}
+        <p
+          className="mb-4"
+          style={{
+            color: "#8b949e",
+            lineHeight: 1.7,
+            fontSize: "0.95rem",
+          }}
+        >
+          Open-source image steganography tool.
+          <br />
+          Securely hide encrypted files inside images using{" "}
+          <strong style={{ color: "#c9d1d9" }}>AES-256 encryption</strong>.
         </p>
 
-        {/* License Highlight */}
-        <p className="mb-3" style={{ color: "#8b949e", fontSize: "0.875rem" }}>
-          Released under the <span style={{ color: "#58a6ff", fontWeight: 500 }}>MIT License</span>
-        </p>
-
-        {/* GitHub Link */}
-        <div className="mb-4">
-          <a 
-            href={GH_LINK} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-decoration-none d-inline-flex align-items-center gap-2 px-3 py-2 rounded"
-            style={{ 
-              border: "1px solid #30363d", 
-              color: "#c9d1d9", 
-              fontSize: "0.875rem",
-              transition: "background-color 0.2s, border-color 0.2s"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)";
-              e.currentTarget.style.borderColor = "#8b949e";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.borderColor = "#30363d";
-            }}
+        {/* Action Buttons */}
+        <div className="d-flex justify-content-center flex-wrap gap-3 mb-4">
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={buttonStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
-            View on GitHub
+            <FaGithub size={16} />
+            <span>GitHub</span>
+          </a>
+
+          <a
+            href={LICENSE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={buttonStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <HiDocumentText size={18} />
+            <span>MIT License</span>
+          </a>
+
+          <a
+            href={ISSUES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={buttonStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <FaBug size={16} />
+            <span>Report Issue</span>
           </a>
         </div>
 
-        {/* Legal Subtext */}
-        <p 
-          style={{ 
-            color: "#8b949e", 
-            fontSize: "0.8rem", 
-            maxWidth: "550px", 
-            margin: "0 auto", 
-            opacity: 0.7,
-            lineHeight: "1.5"
+        {/* Version */}
+        <p
+          className="mb-0"
+          style={{
+            color: "#8b949e",
+            fontSize: "0.85rem",
           }}
         >
-          Permission is hereby granted, free of charge, to any person obtaining a copy of this software. 
-          See the LICENSE file for full terms and conditions.
+          <a
+            href={RELEASES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "#58a6ff",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            <FaTag size={12} />
+            Version v{pkg.version}
+          </a>
         </p>
       </div>
     </footer>
