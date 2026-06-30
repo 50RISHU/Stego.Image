@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.1.0] - 2026-06-30
+
+### Added
+- Redesigned footer with a clean, GitHub-inspired interface.
+- Dynamic application version display sourced from `package.json`.
+- Quick access buttons for GitHub, MIT License, and Report Issue.
+- Icons for footer action buttons.
+- Version link that points to GitHub Releases.
+
+### Changed
+- Improved footer layout with concise project information.
+- Implemented route-based footer visibility.
+- Footer is now hidden on the Encode and Decode pages for a distraction-free workspace.
+- Refactored footer hover effects for cleaner and more maintainable code.
+
+### Fixed
+- Corrected footer icon imports and rendering.
+- Fixed hover interactions using `currentTarget`.
+- Improved spacing, alignment, and responsiveness of footer elements.
+
 ## [1.0.0] - 2024-06-25
 
 ### Added
