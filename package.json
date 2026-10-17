@@ -15,7 +15,7 @@
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "pako": "^2.1.0",
-    "react": "^19.2.4",
+    "react": "^19.3.0",
     "react-dom": "^19.2.7",
     "react-dropzone": "^15.0.0",
     "react-helmet-async": "^3.0.0",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.3.0",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "eslint": "^10.6.0",
